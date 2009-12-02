@@ -210,7 +210,7 @@ class HL7::Message
   end
 
   # yield each segment in the message
-  def each # :yeilds: segment
+  def each # :yields: segment
     return unless @segments
     @segments.each { |s| yield s }
   end
