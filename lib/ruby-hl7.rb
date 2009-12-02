@@ -647,6 +647,58 @@ class HL7::Message::Segment
 
 end
 
+class Date
+  # Get a HL7 timestamp (type TS) for a Date instance.
+  #
+  #  Date.parse('2009-12-02').to_hl7
+  #  => "20091202"
+  def to_hl7
+    strftime('%Y%m%d')
+  end
+end
+
+class Time
+  # Get a HL7 timestamp (type TS) for a Time instance.
+  #
+  # fraction_digits:: specifies a number of digits of fractional seconds. Its default value is 0.
+  #
+  #  Time.parse('01:23').to_hl7
+  #  => "20091202012300"
+  #  Time.now.to_hl7(3)
+  #  => "20091202153652.302"
+  def to_hl7( fraction_digits = 0)
+    strftime('%Y%m%d%H%M%S') +
+      if fraction_digits == 0
+        ''
+      elsif fraction_digits <= 6
+        '.' + sprintf('%06d', usec)[0, fraction_digits]
+      else
+        '.' + sprintf('%06d', usec) + '0' * (fraction_digits - 6)
+      end
+  end
+end
+
+class DateTime
+  # Get a HL7 timestamp (type TS) for a Time instance.
+  #
+  # fraction_digits:: specifies a number of digits of fractional seconds. Its default value is 0.
+  #
+  #  Time.parse('01:23').to_hl7
+  #  => "20091202012300"
+  #  Time.now.to_hl7(3)
+  #  => "20091202153652.302"
+  def to_hl7( fraction_digits = 0)
+    strftime('%Y%m%d%H%M%S') +
+      if fraction_digits == 0
+        ''
+      elsif fraction_digits <= 6
+        '.' + sprintf('%06d', usec)[0, fraction_digits]
+      else
+        '.' + sprintf('%06d', usec) + '0' * (fraction_digits - 6)
+      end
+  end
+end
+
 # parse an hl7 formatted date
 #def Date.from_hl7( hl7_date )
 #end
