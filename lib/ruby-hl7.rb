@@ -199,7 +199,7 @@ class HL7::Message
   # parse the provided String or Enumerable object into this message
   def parse( inobj )
     unless inobj.kind_of?(String) || inobj.respond_to?(:each)
-      raise HL7::ParseError.new
+      raise HL7::ParseError.new( "object to parse should be string or enumerable" )
     end
 
     if inobj.kind_of?(String)
@@ -287,7 +287,7 @@ class HL7::Message
   end
 
   def generate_segments( ary )
-    raise HL7::ParseError.new unless ary.length > 0
+    raise HL7::ParseError.new( "no array to generate segments" ) unless ary.length > 0
 
     @parsing = true
     last_seg = nil
@@ -304,7 +304,7 @@ class HL7::Message
   def generate_segment( elm, last_seg )
       seg_parts = elm.split( @element_delim, -1 )
       unless seg_parts && (seg_parts.length > 0)
-        raise HL7::ParseError.new if HL7.ParserConfig[:empty_segment_is_error] || false
+        raise HL7::ParseError.new( "empty segment is an error per configuration setting" ) if HL7.ParserConfig[:empty_segment_is_error] || false
         return nil
       end
 
