@@ -564,7 +564,7 @@ class HL7::Message::Segment
   #   * :id is the field number to reference (optional, auto-increments from 1
   #      by default)
   #   * :blk is a validation proc (optional, overrides the second argument)
-  # * blk is an optional validation proc which MUST take a parameter
+  # * blk is an optional validation/convertion proc which MUST take a parameter
   #   and always return a value for the field (it will be used on read/write
   #   calls)
   def self.add_field( name, options={}, &blk )
