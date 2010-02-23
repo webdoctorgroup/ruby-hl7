@@ -144,9 +144,20 @@ class HL7::Message
     @segments.index( segs.to_a.first )
   end
 
-  # add a segment to the message
+  # add a segment or array of segments to the message
   # * will force auto set_id sequencing for segments containing set_id's
   def <<( value )
+    # do nothing if value is nil
+    return unless value
+    
+    if value.kind_of? Array
+      value.map{|item| append(item)}
+    else
+      append(value)
+    end
+  end
+
+  def append( value )
     unless ( value && value.kind_of?(HL7::Message::Segment) )
       raise HL7::Exception.new( "attempting to append something other than an HL7 Segment" )
     end
@@ -532,7 +543,18 @@ class HL7::Message::Segment
             @parental = p
             alias :old_append :<<
 
-            def <<(value)
+            def <<( value )
+              # do nothing if value is nil
+              return unless value
+              
+              if value.kind_of? Array
+                value.map{|item| append(item)}
+              else
+                append(value)
+              end
+            end
+            
+            def append(value)
               unless (value && value.kind_of?(HL7::Message::Segment))
                 raise HL7::Exception.new( "attempting to append non-segment to a segment list" )
               end
