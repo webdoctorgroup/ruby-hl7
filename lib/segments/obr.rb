@@ -22,10 +22,12 @@ class HL7::Message::Segment::OBR < HL7::Message::Segment
   add_field :order_callback_phone_number
   add_field :placer_field_1
   add_field :placer_field_2
-  add_field :filer_field_1
-  add_field :filer_field_2
+  add_field :filler_field_1
+  add_field :filler_field_2
   add_field :results_status_change_date
   add_field :charge_to_practice
+  add_field :diagnostic_serv_sect_id
+  add_field :result_status
   add_field :parent_result
   add_field :quantity_timing
   add_field :result_copies_to
