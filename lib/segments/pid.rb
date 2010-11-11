@@ -27,7 +27,7 @@ class HL7::Message::Segment::PID < HL7::Message::Segment
   add_field :religion
   add_field :account_number
   add_field :social_security_num
-  add_field :mothers_id
+  add_field :mothers_id, :idx => 21
   add_field :ethnic_group
   add_field :birthplace
   add_field :multi_birth

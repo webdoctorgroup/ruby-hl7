@@ -5,7 +5,7 @@ require 'ruby-hl7'
 
 class PidSegment < Test::Unit::TestCase
   def setup
-    @base = "PID|||333||LastName^FirstName^MiddleInitial^SR^NickName||19760228|F||||||||||555. 55|012345678"
+    @base = "PID|||333||LastName^FirstName^MiddleInitial^SR^NickName||19760228|F||||||||||555. 55|012345678||||||||||201011110924-0700|Y"
   end
 
   def test_admin_sex_limits
@@ -23,6 +23,12 @@ class PidSegment < Test::Unit::TestCase
         pid.admin_sex = x
       end
     end
-        
+
+  end
+
+  def test_death_fields
+    pid = HL7::Message::Segment::PID.new @base
+    assert_equal '201011110924-0700', pid.death_date
+    assert_equal 'Y', pid.death_indicator
   end
 end
