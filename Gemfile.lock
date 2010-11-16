@@ -1,0 +1,12 @@
+GEM
+  remote: http://gems.github.com/
+  specs:
+    peterwald-git (1.1.4)
+    technicalpickles-jeweler (0.11.0)
+      peterwald-git
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  technicalpickles-jeweler
