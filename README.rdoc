@@ -10,8 +10,8 @@ The version id can be found in the HL7::VERSION constant.
 * Docs:         http://ruby-hl7.rubyforge.org
 * Rubyforge:    http://rubyforge.org/projects/ruby-hl7
 * Lists
-** Developers: mailto:ruby-hl7-devel@rubyforge.org
-** Users: mailto:ruby-hl7-users@rubyforge.org
+      * Developers: mailto:ruby-hl7-devel@rubyforge.org
+      * Users: mailto:ruby-hl7-users@rubyforge.org
 
 Copyright (C) 2006-2010 Mark Guzman
 
