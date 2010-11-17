@@ -38,4 +38,4 @@ In your Gemfile:
   gem 'ruby-hl7'
 
 == License
-see the LICENSE file
+See the LICENSE file.
