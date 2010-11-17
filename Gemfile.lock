@@ -1,7 +1,11 @@
 GEM
   remote: http://gems.github.com/
   specs:
+    json_pure (1.4.6)
     peterwald-git (1.1.4)
+    rake (0.8.7)
+    rubyforge (2.0.4)
+      json_pure (>= 1.1.7)
     technicalpickles-jeweler (0.11.0)
       peterwald-git
 
@@ -9,4 +13,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  rake
+  rubyforge
   technicalpickles-jeweler
+
+METADATA
+  version: 1.0.6
