@@ -154,7 +154,7 @@ namespace :forge do
     puts "Logging in"
     rf.login
 
-    changes = open("NOTES").readlines.join("") if File.exists?("NOTES")
+    changes = open("NOTES.md").readlines.join("") if File.exists?("NOTES.md")
     c = rf.userconfig
     c["release_notes"] = spec.description if spec.description
     c["release_changes"] = changes if changes
