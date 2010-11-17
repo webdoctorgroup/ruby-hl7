@@ -5,7 +5,7 @@ for Ruby 1.9 and fix some minor bugs.
 
 ## Release Date
 
-TBD
+November 17, 2010
 
 ## In this release
 
