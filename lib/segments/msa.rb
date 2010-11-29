@@ -1,7 +1,7 @@
 # encoding: UTF-8
 require 'ruby-hl7'
 class HL7::Message::Segment::MSA < HL7::Message::Segment
-  weight 0 # should occur after the msh segment
+  weight 1 # should occur after the msh segment
   add_field :ack_code
   add_field :control_id
   add_field :text

@@ -22,5 +22,6 @@ class HL7::Message::Segment::OBX < HL7::Message::Segment
   add_field :observation_method
   add_field :equipment_instance_id
   add_field :analysis_date
+  add_field :performing_organization_name, :idx => 23
 end
 

@@ -19,4 +19,7 @@ class HL7::Message::Segment::MSH < HL7::Message::Segment
   add_field :app_ack_type, :idx=>15
   add_field :country_code, :idx=>16
   add_field :charset, :idx=>17
+  add_field :principal_language_of_message
+  add_field :alternate_character_set_handling_scheme
+  add_field :message_profile_identifier
 end

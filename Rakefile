@@ -1,13 +1,14 @@
 # $Id$
 require 'rubygems'
 require 'rake'
-require 'rake/testtask'
 require 'rake/rdoctask'
 require 'rake/packagetask'
 require 'rake/gempackagetask'
 require 'rake/contrib/sshpublisher'
 require 'rbconfig'
 require 'rubyforge'
+require 'spec/rake/spectask'
+require 'spec/rake/verify_rcov'
 
 $: << './lib'
 require 'ruby-hl7'
@@ -17,8 +18,8 @@ short_name = full_name.downcase
 # Many of these tasks were garnered from zenspider's Hoe
 # just forced to work my way
 
-desc 'Default: run unit tests.'
-task :default => :test
+desc 'Default: Run all examples'
+task :default => :spec
 
 if RUBY_VERSION < '1.9.1'
   begin
@@ -68,46 +69,22 @@ spec = Gem::Specification.new do |s|
   s.add_dependency("rubyforge", ">= #{::RubyForge::VERSION}")
 end
 
-Rake::TestTask.new do |t|
-  t.test_files = FileList[ 'test/test*.rb', 'test/*test.rb' ]
-  t.verbose = true
+desc "Run all examples"
+Spec::Rake::SpecTask.new(:spec) do |t|
+  t.spec_files = FileList['spec/**/*.rb']
 end
 
-namespace :test do
-  desc 'Measures test coverage'
-  task :coverage do
-    rm_f "coverage"
-    rm_f "coverage.data"
-    rcov = "rcov --aggregate coverage.data --text-summary -Ilib"
-    system("#{rcov} --html test/test*.rb")
-    system("open coverage/index.html") if PLATFORM['darwin']
-  end
-
-  desc 'Heckle the tests'
-  task :heckle do
-    system("heckle HL7::Message")
-  end
-
-  desc 'Show which test files fail when run alone.'
-  task :deps do
-    tests = Dir["test/**/test_*.rb"]  +  Dir["test/**/*_test.rb"]
-
-    tests.each do |test|
-      if not system "ruby -Ibin:lib:test #{test} &> /dev/null" then
-        puts "Dependency Issues: #{test}"
-      end
-    end
-  end
+desc "Run all examples with RCov"
+Spec::Rake::SpecTask.new(:spec_with_rcov) do |t|
+  t.spec_files = FileList['spec/**/*.rb']
+  t.rcov = true
+  t.rcov_opts = ['--exclude', "spec,rcov,test"]
 end
 
-
-desc "Task for cruise Control"
-task :cruise => ["test","test:coverage"] do
-  out = ENV['CC_BUILD_ARTIFACTS']
-  return unless out
-  system "mv coverage #{out}"
+RCov::VerifyTask.new(:verify_rcov => :spec_with_rcov) do |t|
+  t.threshold = 97.13
+  t.index_html = 'coverage/index.html'
 end
-
 
 Rake::RDocTask.new do |rd|
   rd.main = "README.rdoc"
@@ -115,7 +92,6 @@ Rake::RDocTask.new do |rd|
   rd.title = "%s (%s) Documentation" % [ full_name, spec.version ]
   rd.rdoc_dir = 'doc'
 end
-
 
 Rake::GemPackageTask.new(spec) do |pkg|
   pkg.need_tar = true
