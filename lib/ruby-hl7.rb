@@ -4,16 +4,16 @@
 # parsing and generating HL7 (2.x) messages.
 #
 #
-# Author:    Mark Guzman  (mailto:segfault@hasno.info)  
+# Author:    Mark Guzman  (mailto:segfault@hasno.info)
 #
-# Copyright: (c) 2006-2009 Mark Guzman  
+# Copyright: (c) 2006-2009 Mark Guzman
 #
-# License:   BSD  
+# License:   BSD
 #
 #  $Id$
-# 
+#
 # == License
-# see the LICENSE file 
+# see the LICENSE file
 #
 
 require 'rubygems'
@@ -21,7 +21,7 @@ require "stringio"
 require "date"
 
 module HL7 # :nodoc:
-  VERSION = "0.4" 
+  VERSION = "1.0"
   def self.ParserConfig
     @parser_cfg ||= { :empty_segment_is_error => true }
   end
@@ -46,32 +46,32 @@ end
 # Ruby Object representation of an hl7 2.x message
 # the message object is actually a "smart" collection of hl7 segments
 # == Examples
-# 
+#
 # ==== Creating a new HL7 message
-# 
+#
 #  # create a message
 #  msg = HL7::Message.new
-# 
+#
 #  # create a MSH segment for our new message
 #  msh = HL7::Message::Segment::MSH.new
 #  msh.recv_app = "ruby hl7"
 #  msh.recv_facility = "my office"
 #  msh.processing_id = rand(10000).to_s
-#  
+#
 #  msg << msh # add the MSH segment to the message
-#  
+#
 #  puts msg.to_s # readable version of the message
-# 
+#
 #  puts msg.to_hl7 # hl7 version of the message (as a string)
-# 
+#
 #  puts msg.to_mllp # mllp version of the message (as a string)
-# 
-# ==== Parse an existing HL7 message 
-# 
+#
+# ==== Parse an existing HL7 message
+#
 #  raw_input = open( "my_hl7_msg.txt" ).readlines
 #  msg = HL7::Message.new( raw_input )
-#  
-#  puts "message type: %s" % msg[:MSH].message_type 
+#
+#  puts "message type: %s" % msg[:MSH].message_type
 #
 #
 class HL7::Message
@@ -87,7 +87,7 @@ class HL7::Message
     @segments = []
     @segments_by_name = {}
     @item_delim = "^"
-    @element_delim = '|' 
+    @element_delim = '|'
     @segment_delim = "\r"
 
     parse( raw_msg ) if raw_msg
@@ -119,7 +119,7 @@ class HL7::Message
   # value:: an HL7::Message::Segment object
   def []=( index, value )
     unless ( value && value.kind_of?(HL7::Message::Segment) )
-      raise HL7::Exception.new( "attempting to assign something other than an HL7 Segment" ) 
+      raise HL7::Exception.new( "attempting to assign something other than an HL7 Segment" )
     end
 
     if index.kind_of?(Range) || index.kind_of?(Fixnum)
@@ -137,7 +137,7 @@ class HL7::Message
   # value:: is expected to be a string
   def index( value )
     return nil unless (value && value.respond_to?(:to_sym))
-    
+
     segs = @segments_by_name[ value.to_sym ]
     return nil unless segs
 
@@ -148,7 +148,7 @@ class HL7::Message
   # * will force auto set_id sequencing for segments containing set_id's
   def <<( value )
     unless ( value && value.kind_of?(HL7::Message::Segment) )
-      raise HL7::Exception.new( "attempting to append something other than an HL7 Segment" ) 
+      raise HL7::Exception.new( "attempting to append something other than an HL7 Segment" )
     end
 
     value.segment_parent = self unless value.segment_parent
@@ -190,9 +190,9 @@ class HL7::Message
     # parse a String or Enumerable object into an HL7::Message if possible
     # * returns a new HL7::Message if successful
     def parse( inobj )
-      HL7::Message.new do |msg| 
-        msg.parse( inobj ) 
-      end  
+      HL7::Message.new do |msg|
+        msg.parse( inobj )
+      end
     end
   end
 
@@ -214,7 +214,7 @@ class HL7::Message
     return unless @segments
     @segments.each { |s| yield s }
   end
-  
+
   # return the segment count
   def length
     0 unless @segments
@@ -222,13 +222,13 @@ class HL7::Message
   end
 
   # provide a screen-readable version of the message
-  def to_s    
-    @segments.collect { |s| s if s.to_s.length > 0 }.join( "\n" )                               
+  def to_s
+    @segments.collect { |s| s if s.to_s.length > 0 }.join( "\n" )
   end
 
   # provide a HL7 spec version of the message
   def to_hl7
-    @segments.collect { |s| s if s.to_s.length > 0 }.join( @segment_delim ) 
+    @segments.collect { |s| s if s.to_s.length > 0 }.join( @segment_delim )
   end
 
   # provide the HL7 spec version of the message wrapped in MLLP
@@ -263,12 +263,12 @@ class HL7::Message
   def parse_element_delim(str)
     (str && str.kind_of?(String)) ? str.slice(3,1) : "|"
   end
-  
+
   # Get the item delimiter from an MSH segment
   def parse_item_delim(str)
     (str && str.kind_of?(String)) ? str.slice(4,1) : "^"
   end
-  
+
   def parse_enumerable( inary )
     #assumes an enumeration of strings....
     inary.each do |oary|
@@ -292,7 +292,7 @@ class HL7::Message
     @parsing = true
     last_seg = nil
     ary.each do |elm|
-      if elm.slice(0,3) == "MSH" 
+      if elm.slice(0,3) == "MSH"
         @item_delim = parse_item_delim(elm)
         @element_delim = parse_element_delim(elm)
       end
@@ -307,7 +307,7 @@ class HL7::Message
         raise HL7::ParseError.new if HL7.ParserConfig[:empty_segment_is_error] || false
         return nil
       end
-      
+
       seg_name = seg_parts[0]
       if RUBY_VERSION < "1.9" && HL7::Message::Segment.constants.index(seg_name) # do we have an implementation?
         kls = eval("HL7::Message::Segment::%s" % seg_name)
@@ -320,13 +320,13 @@ class HL7::Message
       end
       new_seg = kls.new( elm, [@element_delim, @item_delim] )
       new_seg.segment_parent = self
-      
+
       if last_seg && last_seg.respond_to?(:children) && last_seg.accepts?( seg_name )
         last_seg.children << new_seg
         new_seg.is_child_segment = true
         return last_seg
       end
-        
+
       @segments << new_seg
 
       # we want to allow segment lookup by name
@@ -336,9 +336,9 @@ class HL7::Message
         @segments_by_name[ seg_sym ] << new_seg
       end
 
-      new_seg 
+      new_seg
   end
-end                
+end
 
 # Ruby Object representation of an hl7 2.x message segment
 # The segments can be setup to provide aliases to specific fields with
@@ -354,10 +354,10 @@ end
 #    add_field :block_example do |value|
 #      raise HL7::InvalidDataError.new unless value.to_i < 100 && value.to_i > 10
 #      return value
-#    end 
+#    end
 #    # this block will be executed when seg.block_example= is called
 #    # and when seg.block_example is called
-#      
+#
 class HL7::Message::Segment
   attr :segment_parent, true
   attr :element_delim
@@ -367,14 +367,14 @@ class HL7::Message::Segment
   # setup a new HL7::Message::Segment
   # raw_segment:: is an optional String or Array which will be used as the
   #               segment's field data
-  # delims:: an optional array of delimiters, where 
+  # delims:: an optional array of delimiters, where
   #               delims[0] = element delimiter
   #               delims[1] = item delimiter
   def initialize(raw_segment="", delims=[], &blk)
     @segments_by_name = {}
     @field_total = 0
     @is_child = false
-    
+
     @element_delim = (delims.kind_of?(Array) && delims.length>0) ? delims[0] : "|"
     @item_delim = (delims.kind_of?(Array) && delims.length>1) ? delims[1] : "^"
 
@@ -383,7 +383,7 @@ class HL7::Message::Segment
     else
       @elements = raw_segment.split( @element_delim, -1 )
       if raw_segment == ""
-        @elements[0] = self.class.to_s.split( "::" ).last 
+        @elements[0] = self.class.to_s.split( "::" ).last
         @elements << ""
       end
     end
@@ -395,15 +395,15 @@ class HL7::Message::Segment
       end
       callctx.__seg__(self)
       # TODO: find out if this pollutes the calling namespace permanently...
-      
+
       to_do = <<-END
       def method_missing( sym, *args, &blk )
-        __seg__.send( sym, args, blk )  
+        __seg__.send( sym, args, blk )
       end
       END
 
       eval( to_do, blk.binding )
-      yield self 
+      yield self
       eval( "undef method_missing", blk.binding )
     end
   end
@@ -417,7 +417,7 @@ class HL7::Message::Segment
   end
 
   def to_info
-    "%s: empty segment >> %s" % [ self.class.to_s, @elements.inspect ] 
+    "%s: empty segment >> %s" % [ self.class.to_s, @elements.inspect ]
   end
 
   # output the HL7 spec version of the segment
@@ -458,7 +458,7 @@ class HL7::Message::Segment
   end
 
   # sort-compare two Segments, 0 indicates equality
-  def <=>( other ) 
+  def <=>( other )
     return nil unless other.kind_of?(HL7::Message::Segment)
 
     # per Comparable docs: http://www.ruby-doc.org/core/classes/Comparable.html
@@ -467,7 +467,7 @@ class HL7::Message::Segment
     return 1 if diff < 0
     return 0
   end
-  
+
   # get the defined sort-weight of this segment class
   # an alias for self.weight
   def weight
@@ -475,7 +475,7 @@ class HL7::Message::Segment
   end
 
 
-  # return true if the segment has a parent 
+  # return true if the segment has a parent
   def is_child_segment?
     (@is_child_segment ||= false)
   end
@@ -555,19 +555,19 @@ class HL7::Message::Segment
         t = t.to_sym if t && (t.to_s.length > 0) && t.respond_to?(:to_sym)
         child_types.index t
       end
-    end 
-  end 
+    end
+  end
 
-  # define a field alias 
+  # define a field alias
   # * name is the alias itself (required)
-  # * options is a hash of parameters 
+  # * options is a hash of parameters
   #   * :id is the field number to reference (optional, auto-increments from 1
   #      by default)
   #   * :blk is a validation proc (optional, overrides the second argument)
   # * blk is an optional validation proc which MUST take a parameter
   #   and always return a value for the field (it will be used on read/write
   #   calls)
-  def self.add_field( name, options={}, &blk ) 
+  def self.add_field( name, options={}, &blk )
     options = { :idx =>-1, :blk =>blk}.merge!( options )
     name ||= :id
     namesym = name.to_sym
@@ -576,10 +576,10 @@ class HL7::Message::Segment
       options[:idx] = @field_cnt # provide default auto-incrementing
     end
     @field_cnt = options[:idx].to_i + 1
-    
+
     singleton.module_eval do
       @fields ||= {}
-      @fields[ namesym ] = options  
+      @fields[ namesym ] = options
     end
 
     self.class_eval <<-END
@@ -593,7 +593,7 @@ class HL7::Message::Segment
       end
 
       def #{name}=(value)
-        write_field( :#{namesym}, value ) 
+        write_field( :#{namesym}, value )
       end
     END
   end
@@ -619,7 +619,7 @@ class HL7::Message::Segment
   def read_field( name ) #:nodoc:
     idx, field_blk = field_info( name )
     return nil unless idx
-    return nil if (idx >= @elements.length) 
+    return nil if (idx >= @elements.length)
 
     ret = @elements[ idx ]
     ret = ret.first if (ret.kind_of?(Array) && ret.length == 1)
@@ -662,7 +662,7 @@ end
 
 # Provide a catch-all information preserving segment
 # * nb: aliases are not provided BUT you can use the numeric element accessor
-# 
+#
 #  seg = HL7::Message::Segment::Default.new
 #  seg.e0 = "NK1"
 #  seg.e1 = "SOMETHING ELSE"
@@ -671,7 +671,7 @@ end
 class HL7::Message::Segment::Default < HL7::Message::Segment
   def initialize(raw_segment="", delims=[])
     segs = [] if (raw_segment == "")
-    segs ||= raw_segment 
+    segs ||= raw_segment
     super( segs, delims )
   end
 end
