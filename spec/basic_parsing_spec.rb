@@ -240,14 +240,14 @@ describe HL7::Message do
       obr = HL7::Message::Segment::OBR.new
       lambda do
         obr.children.should_not be_nil
-        obr.children.length.should == 0
+        obr.children.length.should be_zero
       end.should_not raise_error
     end
 
     it 'can add child elements' do
       obr = HL7::Message::Segment::OBR.new
       lambda do
-        obr.children.length.should == 0
+        obr.children.length.should be_zero
         (1..5).each do |x|
           obr.children << HL7::Message::Segment::OBX.new
           obr.children.length.should == x
