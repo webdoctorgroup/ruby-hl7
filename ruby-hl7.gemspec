@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ruby-hl7}
-  s.version = "0.4.0"
+  s.version = "1.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mark Guzman"]
-  s.date = %q{2010-11-17}
+  s.date = %q{2010-11-30}
   s.description = %q{A simple library to parse and generate HL7 2.x messages}
   s.email = %q{segfault@hasno.info}
   s.extra_rdoc_files = [
@@ -15,23 +15,52 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     "lib/ruby-hl7.rb",
+    "lib/segments/err.rb",
     "lib/segments/evn.rb",
     "lib/segments/msa.rb",
     "lib/segments/msh.rb",
+    "lib/segments/nk1.rb",
     "lib/segments/nte.rb",
     "lib/segments/obr.rb",
     "lib/segments/obx.rb",
+    "lib/segments/orc.rb",
     "lib/segments/oru.rb",
     "lib/segments/pid.rb",
     "lib/segments/pv1.rb",
     "lib/segments/pv2.rb",
     "lib/segments/qrd.rb",
     "lib/segments/qrf.rb",
+    "lib/segments/sft.rb",
+    "lib/segments/spm.rb",
+    "lib/string.rb",
+    "lib/test/hl7_messages.rb",
     "test_data/adt_a01.hl7",
+    "test_data/cerner/cerner_bordetella.hl7",
+    "test_data/cerner/cerner_en.hl7",
+    "test_data/cerner/cerner_lead.hl7",
+    "test_data/cerner/cerner_sequential.hl7",
+    "test_data/empty-batch.hl7",
     "test_data/empty.hl7",
     "test_data/empty_segments.hl7",
     "test_data/lotsunknowns.hl7",
+    "test_data/nist/ORU_R01_2.5.1_SampleTestCase1.er7",
+    "test_data/nist/ORU_R01_2.5.1_SampleTestCase2.er7",
+    "test_data/nist/ORU_R01_2.5.1_SampleTestCase3.er7",
+    "test_data/nist/ORU_R01_2.5.1_SampleTestCase4.er7",
+    "test_data/nist/ORU_R01_2.5.1_SampleTestCase5.er7",
+    "test_data/nist/ORU_R01_2.5.1_SampleTestCase6.er7",
     "test_data/obxobr.hl7",
+    "test_data/realm/realm-animal-rabies.hl7",
+    "test_data/realm/realm-bad-batch.hl7",
+    "test_data/realm/realm-batch.hl7",
+    "test_data/realm/realm-campylobacter-jejuni.hl7",
+    "test_data/realm/realm-cj-badloinc.hl7",
+    "test_data/realm/realm-cj-joeslab.hl7",
+    "test_data/realm/realm-cj.hl7",
+    "test_data/realm/realm-err.hl7",
+    "test_data/realm/realm-hepatitis-c-virus.hl7",
+    "test_data/realm/realm-lead-laboratory-result.hl7",
+    "test_data/realm/realm-minimal-message.hl7",
     "test_data/rqi_r04.hl7",
     "test_data/test.hl7",
     "test_data/test2.hl7"
@@ -43,17 +72,6 @@ Gem::Specification.new do |s|
   s.rubyforge_project = %q{ruby-hl7}
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{Ruby HL7 Library}
-  s.test_files = [
-    "test/test_dynamic_segment_def.rb",
-    "test/test_obx_segment.rb",
-    "test/test_pid_segment.rb",
-    "test/test_speed_parsing.rb",
-    "test/test_obr_segment.rb",
-    "test/test_basic_parsing.rb",
-    "test/test_msa_segment.rb",
-    "test/test_default_segment.rb",
-    "test/test_child_segment.rb"
-  ]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
