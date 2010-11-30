@@ -1,26 +1,30 @@
 ## Overview
 
-Version 0.4.0 of the ruby-hl7 gem is a minor release to provide support
-for Ruby 1.9 and fix some minor bugs.
+Version 1.0.0 of the ruby-hl7 gem provides better support for HL7 version 2.5.1 and some technical improvements like integration with rspec.
+It also includes a number of sample HL7 messages from different sources, notably NIST.
 
 ## Release Date
 
-November 17, 2010
+November 30, 2010
 
 ## In this release
 
 ### Features
 
-* The ruby-hl7 gem is now compatible with Ruby 1.9.
+* The ruby-hl7 gem provides support for the following new segments:
+  * ERR
+  * NK1
+  * ORC
+  * SFT
+  * SPM
+* The ruby-hl7 gem now supports parsing of HL7 message batches.
+* The ruby-hl7 gem now uses rspec 1.3 for unit tests rather than Test::Unit, allowing for BDD-style unit testing.  It has also been
+  integrated with the Bundler since release 0.4.0.
+* A number of sample HL7 messages from NIST, Cerner and other sources are now available with the gem, both HL7 2.3.1 and 2.5.1.
 
 ### Bug fixes
 
-* The <tt>:diagnostic_serv_sect_id</tt> and <tt>:result_status</tt>
-fields (OBR-24 and OBR-25) were missing from the OBR segment.  This had
-the effect of shifting the indices associated with later fields by 2.
-* The PID-20 field (patient driver's license number) is deprecated.  It
-was missing, and as a result, shifted the indices associated with later
-fields in the PID segment.
+Release 1.0.0 does not address any bugs.
 
 ## Known Issues
 
