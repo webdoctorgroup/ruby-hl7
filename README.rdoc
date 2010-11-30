@@ -14,6 +14,7 @@ Lists
 
 * Developers: mailto:ruby-hl7-devel@rubyforge.org
 * Users: mailto:ruby-hl7-users@rubyforge.org
+* Google group: http://groups.google.com/group/ruby-hl7
 
 Copyright (C) 2006-2010 Mark Guzman
 
