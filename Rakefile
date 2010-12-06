@@ -29,7 +29,7 @@ if RUBY_VERSION < '1.9.1'
       s.full_name
       s.summary = "Ruby HL7 Library"
       s.authors = ["Mark Guzman"]
-      s.email = "segfault@hasno.info"
+      s.email = "ruby-hl7@googlegroups.com"
       s.homepage = "http://github.com/ruby-hl7/ruby-hl7"
       s.description = "A simple library to parse and generate HL7 2.x messages"
       s.require_path = "lib"
@@ -53,8 +53,8 @@ spec = Gem::Specification.new do |s|
   s.full_name
   s.version = HL7::VERSION
   s.author = "Mark Guzman"
-  s.email = "segfault@hasno.info"
-  s.homepage = "http://rubyforge.org/ruby-hl7"
+  s.email = "ruby-hl7@googlegroups.com"
+  s.homepage = "https://github.com/ruby-hl7/ruby-hl7"
   s.platform = Gem::Platform::RUBY
   s.summary = "Ruby HL7 Library"
   s.rubyforge_project = short_name
