@@ -1,15 +1,17 @@
 ## Overview
 
-Version 1.0.1 of the ruby-hl7 gem updates the contact info associated
-with the gem.
+Version 1.0.2 of the ruby-hl7 gem corrects an error in a sample
+message.
 
 ## Release Date
 
-December 6, 2010
+December 8, 2010
 
 ## In this release
 
-There are no software changes in this release.
+### Bug fixes
+
+* **Bad work phone number in Realm Hepatitis C message** [Issue 1](https://github.com/ruby-hl7/ruby-hl7/issues/closed#issue/1) There was a typo in a message manually copied from the Realm document.
 
 ## Known Issues
 
