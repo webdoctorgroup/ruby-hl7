@@ -1,17 +1,19 @@
 ## Overview
 
-Version 1.0.2 of the ruby-hl7 gem corrects an error in a sample
-message.
+Version 1.0.3 of the ruby-hl7 gem removes some sample messages.
 
 ## Release Date
 
-December 8, 2010
+January 25, 2011
 
 ## In this release
 
+* Sample messages from Cerner were removed.
+* Some gem dependencies were updated.
+
 ### Bug fixes
 
-* **Bad work phone number in Realm Hepatitis C message** [Issue 1](https://github.com/ruby-hl7/ruby-hl7/issues/closed#issue/1) There was a typo in a message manually copied from the Realm document.
+There are no bug fixes in this release.
 
 ## Known Issues
 
