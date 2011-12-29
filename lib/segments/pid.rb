@@ -9,7 +9,9 @@ class HL7::Message::Segment::PID < HL7::Message::Segment
   add_field :alt_patient_id, :idx => 3
   add_field :patient_name, :idx => 4
   add_field :mother_maiden_name, :idx => 5
-  add_field :patient_dob, :idx => 6
+  add_field :patient_dob, :idx => 6 do |value|
+    convert_to_ts(value)
+  end
   add_field :admin_sex, :idx => 7 do |sex|
     unless /^[FMOUANC]$/.match(sex) || sex == nil || sex == ""
       raise HL7::InvalidDataError.new( "bad administrative sex value (not F|M|O|U|A|N|C)" )
