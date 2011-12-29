@@ -604,6 +604,14 @@ class HL7::Message::Segment
     end
   end
 
+  def self.convert_to_ts(value) #:nodoc:
+    if value.is_a?(Time) or value.is_a?(Date)
+      return value.to_hl7
+    else
+      return value
+    end
+  end
+
   def field_info( name ) #:nodoc:
     field_blk = nil
     idx = name # assume we've gotten a fixnum
