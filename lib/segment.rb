@@ -171,16 +171,23 @@ class HL7::Message::Segment
     end
   end
 
-
-
   # allows a segment to store other segment objects
   # used to handle associated lists like one OBR to many OBX segments
   def self.has_children(child_types)
     @child_types = child_types
+
+    define_method_child_types
+    define_method_children
+    define_method_accepts child_types
+  end
+
+  def self.define_method_child_types
     define_method(:child_types) do
       @child_types
     end
+  end
 
+  def self.define_method_children
     self.class_eval do
       define_method(:children) do
         unless @my_children
@@ -194,11 +201,9 @@ class HL7::Message::Segment
               # do nothing if value is nil
               return unless value
 
-              if value.kind_of? Array
-                value.map{|item| append(item)}
-              else
-                append(value)
-              end
+              # make sure it's an array
+              value = [value].flatten
+              value.map{|item| append(item)}
             end
 
             def append(value)
@@ -216,16 +221,20 @@ class HL7::Message::Segment
             end
           end
         end
-
         @my_children
-      end
-
-      define_method('accepts?') do |t|
-        t = t.to_sym if t && (t.to_s.length > 0) && t.respond_to?(:to_sym)
-        child_types.index t
       end
     end
   end
+
+  def self.define_method_accepts(child_types)
+    self.class_eval do
+      define_method('accepts?') do |t|
+        t = t.to_sym if t.respond_to?(:to_sym)
+        !!child_types.index(t)
+      end
+    end
+  end
+
 
   # define a field alias
   # * name is the alias itself (required)
@@ -324,18 +333,6 @@ class HL7::Message::Segment
 
 end
 
-# parse an hl7 formatted date
-#def Date.from_hl7( hl7_date )
-#end
-
-#def Date.to_hl7_short( ruby_date )
-#end
-
-#def Date.to_hl7_med( ruby_date )
-#end
-
-#def Date.to_hl7_long( ruby_date )
-#end
 
 # Provide a catch-all information preserving segment
 # * nb: aliases are not provided BUT you can use the numeric element accessor
