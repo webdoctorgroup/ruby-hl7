@@ -36,15 +36,7 @@ class HL7::Message::Segment
     @element_delim = (delims.kind_of?(Array) && delims.length>0) ? delims[0] : "|"
     @item_delim = (delims.kind_of?(Array) && delims.length>1) ? delims[1] : "^"
 
-    if (raw_segment.kind_of? Array)
-      @elements = raw_segment
-    else
-      @elements = raw_segment.split( @element_delim, -1 )
-      if raw_segment == ""
-        @elements[0] = self.class.to_s.split( "::" ).last
-        @elements << ""
-      end
-    end
+    @elements = elements_from_segment(raw_segment)
 
     if block_given?
       callctx = eval( "self", blk.binding )
@@ -64,6 +56,22 @@ class HL7::Message::Segment
       yield self
       eval( "undef method_missing", blk.binding )
     end
+  end
+
+  # Breaks the raw segment into elements
+  # raw_segment:: is an optional String or Array which will be used as the
+  #               segment's field data
+  def elements_from_segment(raw_segment)
+    if (raw_segment.kind_of? Array)
+      elements = raw_segment
+    else
+      elements = raw_segment.split( @element_delim, -1 )
+      if raw_segment == ""
+        elements[0] = self.class.to_s.split( "::" ).last
+        elements << ""
+      end
+    end
+    elements
   end
 
   def self.add_child_type(child_type)
