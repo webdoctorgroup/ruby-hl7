@@ -31,7 +31,7 @@ describe 'dynamic segment definition' do
       end
 
       if RUBY_ENGINE == 'rbx'
-        lambda { e3 "TEST" }.should raise_error(PrimitiveFailure)
+        lambda { e3 "TEST" }.should raise_error(Rubinius::Internal)
       else
         lambda { e3 "TEST" }.should raise_error(NoMethodError)
       end

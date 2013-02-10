@@ -16,7 +16,7 @@ describe HL7::Message::Segment do
   before :all do
     @base = "Mock|no_block|validated|converted"
   end
-  
+
   context "block on field definitions" do
     it 'is evaluated on access by field name' do
       msg = MockSegment.new(@base)
