@@ -1,7 +1,7 @@
 # This module includes methods for storing segments inside segments.
 # has_children(child_types) defines three methods dynamically.
 
-module SegmentListStorage
+module HL7::Message::SegmentListStorage
   def add_child_type(child_type)
     if @child_types
       @child_types << child_type.to_sym

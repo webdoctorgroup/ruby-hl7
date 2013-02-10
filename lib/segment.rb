@@ -1,5 +1,3 @@
-require 'segment_list_storage'
-
 # Ruby Object representation of an hl7 2.x message segment
 # The segments can be setup to provide aliases to specific fields with
 # optional validation code that is run when the field is modified
@@ -12,14 +10,15 @@ require 'segment_list_storage'
 #    add_field :something_else, :idx=>6  # :idx=>6 and field count=6
 #    add_field :something_more           # :idx=>7
 #    add_field :block_example do |value|
-#      raise HL7::InvalidDataError.new unless value.to_i < 100 && value.to_i > 10
+#       raise HL7::InvalidDataError.new
+#                                  unless value.to_i < 100 && value.to_i > 10
 #      return value
 #    end
 #    # this block will be executed when seg.block_example= is called
 #    # and when seg.block_example is called
 #
 class HL7::Message::Segment
-  extend SegmentListStorage
+  extend HL7::Message::SegmentListStorage
 
   attr :segment_parent, true
   attr :element_delim

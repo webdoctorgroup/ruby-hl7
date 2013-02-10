@@ -7,7 +7,7 @@ class SegmentWithChildren < HL7::Message::Segment
   has_children [:NTE,:OBX,:ORC,:SPM]
 end
 
-describe SegmentListStorage do
+describe HL7::Message::SegmentListStorage do
   describe "Adding childs using has_children and add_child_type" do
     subject do
       segment_instance = segment_class.new

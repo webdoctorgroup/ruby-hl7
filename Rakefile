@@ -12,6 +12,8 @@ require 'simplecov'
 
 $: << './lib'
 require 'ruby-hl7'
+require 'message'
+require 'segment_list_storage'
 require 'segment'
 
 full_name = "Ruby-HL7"
