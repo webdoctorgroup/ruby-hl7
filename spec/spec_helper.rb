@@ -8,6 +8,7 @@ if ENV["COVERAGE"]
 end
 
 require File.expand_path('../../lib/ruby-hl7', __FILE__)
+require File.expand_path('../../lib/message_batch_parse', __FILE__)
 require File.expand_path('../../lib/message', __FILE__)
 require File.expand_path('../../lib/segment_list_storage', __FILE__)
 require File.expand_path('../../lib/segment', __FILE__)
