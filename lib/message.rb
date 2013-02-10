@@ -1,3 +1,45 @@
+module HL7::BatchParse
+  def parse_batch(batch) # :yields: message
+    raise HL7::ParseError, 'badly_formed_batch_message' unless
+      batch.hl7_batch?
+
+    batch = clean_batch_for_jruby batch
+
+    raise HL7::ParseError, 'empty_batch_message' unless
+      match = /\rMSH/.match(batch)
+
+    match.post_match.split(/\rMSH/).each_with_index do |_msg, index|
+      if md = /\rBTS/.match(_msg)
+        # TODO: Validate the message count in the BTS segment
+        # should == index + 1
+        _msg = md.pre_match
+      end
+
+      yield 'MSH' + _msg
+    end
+  end
+
+  # parse a String or Enumerable object into an HL7::Message if possible
+  # * returns a new HL7::Message if successful
+  def parse( inobj )
+    HL7::Message.new do |msg|
+      msg.parse( inobj )
+    end
+  end
+
+    # JRuby seems to change our literal \r characters in sample
+  # messages (from here documents) into newlines.  We make a copy
+  # here, reverting to carriage returns.  The input is unchanged.
+  #
+  # This does not occur when posts are received with CR
+  # characters, only in sample messages from here documents.  The
+  # expensive copy is only incurred when the batch message has a
+  # newline character in it.
+  def clean_batch_for_jruby(batch)
+    batch.gsub("\n", "\r") if batch.include?("\n")
+  end
+end
+
 # Ruby Object representation of an hl7 2.x message
 # the message object is actually a "smart" collection of hl7 segments
 # == Examples
@@ -31,6 +73,7 @@
 #
 class HL7::Message
   include Enumerable # we treat an hl7 2.x message as a collection of segments
+  extend HL7::BatchParse
   attr :element_delim
   attr :item_delim
   attr :segment_delim
@@ -122,48 +165,6 @@ class HL7::Message
     name = value.class.to_s.gsub("HL7::Message::Segment::", "").to_sym
     (@segments_by_name[ name ] ||= []) << value
     sequence_segments unless @parsing # let's auto-set the set-id as we go
-  end
-
-  class << self
-    def parse_batch(batch) # :yields: message
-      raise HL7::ParseError, 'badly_formed_batch_message' unless
-        batch.hl7_batch?
-
-      batch = clean_batch_for_jruby batch
-
-      raise HL7::ParseError, 'empty_batch_message' unless
-        match = /\rMSH/.match(batch)
-
-      match.post_match.split(/\rMSH/).each_with_index do |_msg, index|
-        if md = /\rBTS/.match(_msg)
-          # TODO: Validate the message count in the BTS segment
-          # should == index + 1
-          _msg = md.pre_match
-        end
-
-        yield 'MSH' + _msg
-      end
-    end
-
-    # parse a String or Enumerable object into an HL7::Message if possible
-    # * returns a new HL7::Message if successful
-    def parse( inobj )
-      HL7::Message.new do |msg|
-        msg.parse( inobj )
-      end
-    end
-
-    # JRuby seems to change our literal \r characters in sample
-    # messages (from here documents) into newlines.  We make a copy
-    # here, reverting to carriage returns.  The input is unchanged.
-    #
-    # This does not occur when posts are received with CR
-    # characters, only in sample messages from here documents.  The
-    # expensive copy is only incurred when the batch message has a
-    # newline character in it.
-    def clean_batch_for_jruby(batch)
-      batch.gsub("\n", "\r") if batch.include?("\n")
-    end
   end
 
   # parse the provided String or Enumerable object into this message
@@ -272,33 +273,45 @@ class HL7::Message
   end
 
   def generate_segment( elm, last_seg )
-      seg_parts = elm.split( @element_delim, -1 )
-      unless seg_parts && (seg_parts.length > 0)
-        raise HL7::ParseError.new( "empty segment is an error per configuration setting" ) if HL7.ParserConfig[:empty_segment_is_error] || false
-        return nil
+    seg_parts = elm.split( @element_delim, -1 )
+    return nil unless valid_segments_parts seg_parts
+
+    seg_name = seg_parts[0]
+    klass = get_segment_class seg_name
+    new_seg = klass.new( elm, [@element_delim, @item_delim] )
+    new_seg.segment_parent = self
+
+    if last_seg && last_seg.respond_to?(:children) && last_seg.accepts?( seg_name )
+      last_seg.children << new_seg
+      new_seg.is_child_segment = true
+      return last_seg
+    end
+
+    @segments << new_seg
+
+    setup_segment_lookup_by_name(seg_name, new_seg)
+
+    new_seg
+  end
+
+  def valid_segments_parts(seg_parts)
+    unless seg_parts && (seg_parts.length > 0)
+      if HL7.ParserConfig[:empty_segment_is_error] || false
+        raise HL7::ParseError.new( "empty segment is an error per configuration setting" )
+      else
+        return false
       end
+    end
+    return true
+  end
 
-      seg_name = seg_parts[0]
-      klass = get_segment_class seg_name
-      new_seg = klass.new( elm, [@element_delim, @item_delim] )
-      new_seg.segment_parent = self
-
-      if last_seg && last_seg.respond_to?(:children) && last_seg.accepts?( seg_name )
-        last_seg.children << new_seg
-        new_seg.is_child_segment = true
-        return last_seg
-      end
-
-      @segments << new_seg
-
-      # we want to allow segment lookup by name
-      if seg_name && (seg_name.strip.length > 0)
-        seg_sym = seg_name.to_sym
-        @segments_by_name[ seg_sym ] ||= []
-        @segments_by_name[ seg_sym ] << new_seg
-      end
-
-      new_seg
+  def setup_segment_lookup_by_name(seg_name, new_seg)
+    # we want to allow segment lookup by name
+    if seg_name && (seg_name.strip.length > 0)
+      seg_sym = seg_name.to_sym
+      @segments_by_name[ seg_sym ] ||= []
+      @segments_by_name[ seg_sym ] << new_seg
+    end
   end
 
   def get_segment_class(seg_name)
