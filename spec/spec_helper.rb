@@ -9,7 +9,7 @@ end
 
 $: << '../lib'
 
-
+require File.expand_path('../../lib/segment_list_storage', __FILE__)
 require File.expand_path('../../lib/ruby-hl7', __FILE__)
 require File.expand_path('../../lib/segment', __FILE__)
 require File.expand_path('../../lib/test/hl7_messages', __FILE__)

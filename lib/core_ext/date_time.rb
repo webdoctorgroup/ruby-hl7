@@ -3,7 +3,6 @@ module HL7Time
   #
   # fraction_digits:: specifies a number of digits of fractional seconds.
   #                   Its default value is 0.
-  #
   #  Time.parse('01:23').to_hl7
   #  => "20091202012300"
   #  Time.now.to_hl7(3)
@@ -16,7 +15,8 @@ private
   def hl7_fractions(fraction_digits = 0)
     return '' unless fraction_digits > 0
     time_fraction =  hl7_time_fraction
-    answer = '.' + sprintf('%06d', time_fraction) + '0' * ((fraction_digits - 6)).abs
+    answer = ".#{sprintf('%06d', time_fraction)}"
+    answer += '0' * ((fraction_digits - 6)).abs if fraction_digits > 6
     answer[0, 1 + fraction_digits]
   end
 
@@ -29,6 +29,7 @@ private
   end
 end
 
+# Adding the to_hl7 method to the ruby Date class.
 class Date
   # Get a HL7 timestamp (type TS) for a Date instance.
   #
@@ -39,10 +40,12 @@ class Date
   end
 end
 
+# Adding the to_hl7 method to the ruby Time class.
 class Time
   include HL7Time
 end
 
+# Adding the to_hl7 method to the ruby DateTime class.
 class DateTime
   include HL7Time
 end

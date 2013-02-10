@@ -1,3 +1,5 @@
+require 'segment_list_storage'
+
 # Ruby Object representation of an hl7 2.x message segment
 # The segments can be setup to provide aliases to specific fields with
 # optional validation code that is run when the field is modified
@@ -17,6 +19,8 @@
 #    # and when seg.block_example is called
 #
 class HL7::Message::Segment
+  extend SegmentListStorage
+
   attr :segment_parent, true
   attr :element_delim
   attr :item_delim
@@ -72,14 +76,6 @@ class HL7::Message::Segment
       end
     end
     elements
-  end
-
-  def self.add_child_type(child_type)
-    if @child_types
-      @child_types << child_type.to_sym
-    else
-      has_children [ child_type.to_sym ]
-    end
   end
 
   def to_info
@@ -140,7 +136,6 @@ class HL7::Message::Segment
     self.class.weight
   end
 
-
   # return true if the segment has a parent
   def is_child_segment?
     (@is_child_segment ||= false)
@@ -156,7 +151,6 @@ class HL7::Message::Segment
     0 unless @elements
     @elements.length
   end
-
 
   private
   def self.singleton #:nodoc:
@@ -178,71 +172,6 @@ class HL7::Message::Segment
       @my_weight
     end
   end
-
-  # allows a segment to store other segment objects
-  # used to handle associated lists like one OBR to many OBX segments
-  def self.has_children(child_types)
-    @child_types = child_types
-
-    define_method_child_types
-    define_method_children
-    define_method_accepts child_types
-  end
-
-  def self.define_method_child_types
-    define_method(:child_types) do
-      @child_types
-    end
-  end
-
-  def self.define_method_children
-    self.class_eval do
-      define_method(:children) do
-        unless @my_children
-          p = self
-          @my_children ||= []
-          @my_children.instance_eval do
-            @parental = p
-            alias :old_append :<<
-
-            def <<( value )
-              # do nothing if value is nil
-              return unless value
-
-              # make sure it's an array
-              value = [value].flatten
-              value.map{|item| append(item)}
-            end
-
-            def append(value)
-              unless (value && value.kind_of?(HL7::Message::Segment))
-                raise HL7::Exception.new( "attempting to append non-segment to a segment list" )
-              end
-
-              value.segment_parent = @parental
-              k = @parental
-              while (k && k.segment_parent && !k.segment_parent.kind_of?(HL7::Message))
-                k = k.segment_parent
-              end
-              k.segment_parent << value if k && k.segment_parent
-              old_append( value )
-            end
-          end
-        end
-        @my_children
-      end
-    end
-  end
-
-  def self.define_method_accepts(child_types)
-    self.class_eval do
-      define_method('accepts?') do |t|
-        t = t.to_sym if t.respond_to?(:to_sym)
-        !!child_types.index(t)
-      end
-    end
-  end
-
 
   # define a field alias
   # * name is the alias itself (required)

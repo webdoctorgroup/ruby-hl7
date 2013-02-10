@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe Date do
 
- 	subject{ Date.parse('2013-12-02').to_hl7 }
+  subject{ Date.parse('2013-12-02').to_hl7 }
 
   it "should respond to the HL7 timestamp" do
-  	subject.should eq "20131202"
+    subject.should eq "20131202"
   end
 end
 
