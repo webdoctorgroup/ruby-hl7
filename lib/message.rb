@@ -31,7 +31,9 @@
 #
 class HL7::Message
   include Enumerable # we treat an hl7 2.x message as a collection of segments
-  include HL7::MessageParser
+  extend HL7::MessageBatchParser
+
+  attr_reader :message_parser
   attr :element_delim
   attr :item_delim
   attr :segment_delim
@@ -45,11 +47,26 @@ class HL7::Message
     @item_delim = "^"
     @element_delim = '|'
     @segment_delim = "\r"
+    @message_parser = HL7::MessageParser.new(@segment_delim)
 
     parse( raw_msg ) if raw_msg
 
     if block_given?
       blk.call self
+    end
+  end
+
+  def parse( inobj )
+    if not inobj.kind_of?(String) || inobj.respond_to?(:each)
+      raise HL7::ParseError.new( "object to parse should be string or enumerable" )
+    end
+
+    if inobj.kind_of?(String)
+      generate_segments( message_parser.parse_string( inobj ))
+    else
+      inobj.each do |segment|
+        generate_segments( message_parser.parse_string( segment.to_s ))
+      end
     end
   end
 
@@ -182,8 +199,8 @@ class HL7::Message
     last_seg = nil
     ary.each do |elm|
       if elm.slice(0,3) == "MSH"
-        @item_delim = parse_item_delim(elm)
-        @element_delim = parse_element_delim(elm)
+        @item_delim = message_parser.parse_item_delim(elm)
+        @element_delim = message_parser.parse_element_delim(elm)
       end
       last_seg = generate_segment( elm, last_seg ) || last_seg
     end
