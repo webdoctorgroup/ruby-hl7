@@ -31,7 +31,7 @@
 #
 class HL7::Message
   include Enumerable # we treat an hl7 2.x message as a collection of segments
-  extend HL7::MessageBatchParse
+  include HL7::MessageParser
   attr :element_delim
   attr :item_delim
   attr :segment_delim
@@ -125,19 +125,6 @@ class HL7::Message
     sequence_segments unless @parsing # let's auto-set the set-id as we go
   end
 
-  # parse the provided String or Enumerable object into this message
-  def parse( inobj )
-    unless inobj.kind_of?(String) || inobj.respond_to?(:each)
-      raise HL7::ParseError.new( "object to parse should be string or enumerable" )
-    end
-
-    if inobj.kind_of?(String)
-        parse_string( inobj )
-    elsif inobj.respond_to?(:each)
-        parse_enumerable( inobj )
-    end
-  end
-
   # yield each segment in the message
   def each # :yields: segment
     return unless @segments
@@ -188,33 +175,6 @@ class HL7::Message
   end
 
   private
-  # Get the element delimiter from an MSH segment
-  def parse_element_delim(str)
-    (str && str.kind_of?(String)) ? str.slice(3,1) : "|"
-  end
-
-  # Get the item delimiter from an MSH segment
-  def parse_item_delim(str)
-    (str && str.kind_of?(String)) ? str.slice(4,1) : "^"
-  end
-
-  def parse_enumerable( inary )
-    #assumes an enumeration of strings....
-    inary.each do |oary|
-      parse_string( oary.to_s )
-    end
-  end
-
-  def parse_string( instr )
-    post_mllp = instr
-    if /\x0b((:?.|\r|\n)+)\x1c\r/.match( instr )
-      post_mllp = $1 #strip the mllp bytes
-    end
-
-    ary = post_mllp.split( segment_delim, -1 )
-    generate_segments( ary )
-  end
-
   def generate_segments( ary )
     raise HL7::ParseError.new( "no array to generate segments" ) unless ary.length > 0
 

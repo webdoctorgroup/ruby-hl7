@@ -36,8 +36,10 @@ class HL7::Message::Segment
     @field_total = 0
     @is_child = false
 
-    @element_delim = (delims.kind_of?(Array) && delims.length>0) ? delims[0] : "|"
-    @item_delim = (delims.kind_of?(Array) && delims.length>1) ? delims[1] : "^"
+    delims = [ delims ].flatten
+
+    @element_delim = ( delims.length>0 ) ? delims[0] : "|"
+    @item_delim = ( delims.length>1 ) ? delims[1] : "^"
 
     @elements = elements_from_segment(raw_segment)
 
@@ -219,11 +221,7 @@ class HL7::Message::Segment
   end
 
   def self.convert_to_ts(value) #:nodoc:
-    if value.is_a?(Time) or value.is_a?(Date)
-      return value.to_hl7
-    else
-      return value
-    end
+    value.respond_to?(:to_hl7) ? value.to_hl7 : value
   end
 
   def field_info( name ) #:nodoc:

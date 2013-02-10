@@ -12,7 +12,7 @@ require 'simplecov'
 
 $: << './lib'
 require 'ruby-hl7'
-require 'message_batch_parse'
+require 'message_parser'
 require 'message'
 require 'segment_list_storage'
 require 'segment'
