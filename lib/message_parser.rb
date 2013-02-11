@@ -8,7 +8,7 @@ module HL7::MessageBatchParser
     raise HL7::ParseError, 'empty_batch_message' unless
       match = /\rMSH/.match(batch)
 
-    match.post_match.split(/\rMSH/).each_with_index do |_msg, index|
+    match.post_match.split(/\rMSH/).each do |_msg|
       if md = /\rBTS/.match(_msg)
         # TODO: Validate the message count in the BTS segment
         # should == index + 1
@@ -36,16 +36,22 @@ module HL7::MessageBatchParser
   # expensive copy is only incurred when the batch message has a
   # newline character in it.
   private
+
   def clean_batch_for_jruby(batch)
     batch.gsub("\n", "\r") if batch.include?("\n")
   end
 end
 
+# Provides basic methods to parse_string, element and item delimeter parser
 class HL7::MessageParser
   attr_reader :segment_delim
 
   def initialize(segment_delim)
     @segment_delim = segment_delim
+  end
+
+  def self.split_by_delimiter(element, delimiter)
+    element.split( delimiter, -1 )
   end
 
   # parse the provided String or Enumerable object into this message
@@ -54,7 +60,7 @@ class HL7::MessageParser
     if /\x0b((:?.|\r|\n)+)\x1c\r/.match( instr )
       post_mllp = $1 #strip the mllp bytes
     end
-    ary = post_mllp.split( @segment_delim, -1 )
+    ary = HL7::MessageParser.split_by_delimiter(post_mllp, @segment_delim)
     ary
   end
 

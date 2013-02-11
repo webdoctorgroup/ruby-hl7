@@ -37,6 +37,7 @@ class HL7::Message
   attr :element_delim
   attr :item_delim
   attr :segment_delim
+  attr :delimiter
 
   # setup a new hl7 message
   # raw_msg:: is an optional object containing an hl7 message
@@ -49,6 +50,10 @@ class HL7::Message
     @segment_delim = "\r"
     @message_parser = HL7::MessageParser.new(@segment_delim)
 
+    @delimiter = HL7::Message::Delimiter.new( @element_delim,
+                                              @item_delim,
+                                              @segment_delim)
+
     parse( raw_msg ) if raw_msg
 
     if block_given?
@@ -57,16 +62,18 @@ class HL7::Message
   end
 
   def parse( inobj )
-    if not inobj.kind_of?(String) || inobj.respond_to?(:each)
-      raise HL7::ParseError.new( "object to parse should be string or enumerable" )
-    end
-
     if inobj.kind_of?(String)
       generate_segments( message_parser.parse_string( inobj ))
+    elsif inobj.respond_to?(:each)
+      generate_segments_enumerable(inobj)
     else
-      inobj.each do |segment|
-        generate_segments( message_parser.parse_string( segment.to_s ))
-      end
+      raise HL7::ParseError.new( "object to parse should be string or enumerable" )
+    end
+  end
+
+  def generate_segments_enumerable(enumerable)
+    enumerable.each do |segment|
+      generate_segments( message_parser.parse_string( segment.to_s ))
     end
   end
 
@@ -183,7 +190,7 @@ class HL7::Message
         s.set_id = last.set_id.to_i + 1
       end
 
-      if s.respond_to?(:children)
+      if s.has_children?
         sequence_segments( s )
       end
 
@@ -199,66 +206,58 @@ class HL7::Message
     last_seg = nil
     ary.each do |elm|
       if elm.slice(0,3) == "MSH"
-        @item_delim = message_parser.parse_item_delim(elm)
-        @element_delim = message_parser.parse_element_delim(elm)
+        update_delimiters(elm)
       end
       last_seg = generate_segment( elm, last_seg ) || last_seg
     end
     @parsing = nil
   end
 
-  def generate_segment( elm, last_seg )
-    seg_parts = elm.split( @element_delim, -1 )
-    return nil unless valid_segments_parts seg_parts
+  def update_delimiters(elm)
+    @item_delim = message_parser.parse_item_delim(elm)
+    @element_delim = message_parser.parse_element_delim(elm)
+    @delimiter.item = @item_delim
+    @delimiter.element = @element_delim
+  end
 
-    seg_name = seg_parts[0]
-    klass = get_segment_class seg_name
-    new_seg = klass.new( elm, [@element_delim, @item_delim] )
+  def generate_segment( elm, last_seg )
+    segment_generator = HL7::Message::SegmentGenerator.new( elm,
+                                                            last_seg,
+                                                            @delimiter )
+
+    return nil unless segment_generator.valid_segments_parts?
+    segment_generator.seg_name = segment_generator.seg_parts[0]
+
+    new_seg = segment_generator.build
     new_seg.segment_parent = self
 
-    if last_seg && last_seg.respond_to?(:children) && last_seg.accepts?( seg_name )
+    choose_segment_from(last_seg, new_seg, segment_generator.seg_name)
+  end
+
+  def choose_segment_from(last_seg, new_seg, seg_name)
+    if last_seg && last_seg.has_children? && last_seg.accepts?( seg_name )
       last_seg.children << new_seg
       new_seg.is_child_segment = true
-      return last_seg
+
+      last_seg
+    else
+      @segments << new_seg
+      setup_segment_lookup_by_name( seg_name, new_seg)
+      new_seg
     end
-
-    @segments << new_seg
-
-    setup_segment_lookup_by_name(seg_name, new_seg)
-
-    new_seg
   end
 
-  def valid_segments_parts(seg_parts)
-    unless seg_parts && (seg_parts.length > 0)
-      if HL7.ParserConfig[:empty_segment_is_error] || false
-        raise HL7::ParseError.new( "empty segment is an error per configuration setting" )
-      else
-        return false
-      end
-    end
-    return true
-  end
-
+  # Allow segment lookup by name
   def setup_segment_lookup_by_name(seg_name, new_seg)
-    # we want to allow segment lookup by name
-    if seg_name && (seg_name.strip.length > 0)
-      seg_sym = seg_name.to_sym
+    seg_sym = get_symbol_from_name(seg_name)
+    if seg_sym
       @segments_by_name[ seg_sym ] ||= []
       @segments_by_name[ seg_sym ] << new_seg
     end
   end
 
-  def get_segment_class(seg_name)
-    if RUBY_VERSION < "1.9" && HL7::Message::Segment.constants.index(seg_name) # do we have an implementation?
-      klass = eval("HL7::Message::Segment::%s" % seg_name)
-    elsif RUBY_VERSION >= "1.9" && HL7::Message::Segment.constants.index(seg_name.to_sym)
-      klass = eval("HL7::Message::Segment::%s" % seg_name)
-    else
-      # we don't have an implementation for this segment
-      # so lets just preserve the data
-      klass = HL7::Message::Segment::Default
-    end
-    klass
+   def get_symbol_from_name(seg_name)
+    seg_name.to_s.strip.length > 0 ? seg_name.to_sym : nil
   end
+
 end

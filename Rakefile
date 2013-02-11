@@ -15,6 +15,7 @@ require 'ruby-hl7'
 require 'message_parser'
 require 'message'
 require 'segment_list_storage'
+require 'segment_generator'
 require 'segment'
 
 full_name = "Ruby-HL7"

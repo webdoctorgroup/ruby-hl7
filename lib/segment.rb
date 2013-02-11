@@ -70,7 +70,8 @@ class HL7::Message::Segment
     if (raw_segment.kind_of? Array)
       elements = raw_segment
     else
-      elements = raw_segment.split( @element_delim, -1 )
+      elements = HL7::MessageParser.split_by_delimiter( raw_segment,
+                                                        @element_delim )
       if raw_segment == ""
         elements[0] = self.class.to_s.split( "::" ).last
         elements << ""
@@ -151,6 +152,10 @@ class HL7::Message::Segment
   def length
     0 unless @elements
     @elements.length
+  end
+
+  def has_children?
+    self.respond_to?(:children)
   end
 
   private
