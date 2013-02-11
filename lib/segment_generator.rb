@@ -1,6 +1,6 @@
 # Class for grouping the messages delimiter
 class HL7::Message::Delimiter
-  attr_accessor :item, :element
+  attr_accessor :item, :element, :segment
 
   def initialize(element_delim, item_delim, segment_delim)
     @element = element_delim
@@ -24,10 +24,6 @@ class HL7::Message::SegmentGenerator
 
     @seg_parts = HL7::MessageParser.split_by_delimiter( element,
                                                         delimiter.element )
-  end
-
-  def get_symbol_from_name
-    seg_name.to_s.strip.length > 0 ? seg_name.to_sym : nil
   end
 
   def valid_segments_parts?

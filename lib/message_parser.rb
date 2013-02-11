@@ -44,10 +44,10 @@ end
 
 # Provides basic methods to parse_string, element and item delimeter parser
 class HL7::MessageParser
-  attr_reader :segment_delim
+  attr_reader :delimiter
 
-  def initialize(segment_delim)
-    @segment_delim = segment_delim
+  def initialize(delimiter)
+    @delimiter = delimiter
   end
 
   def self.split_by_delimiter(element, delimiter)
@@ -60,7 +60,7 @@ class HL7::MessageParser
     if /\x0b((:?.|\r|\n)+)\x1c\r/.match( instr )
       post_mllp = $1 #strip the mllp bytes
     end
-    ary = HL7::MessageParser.split_by_delimiter(post_mllp, @segment_delim)
+    ary = HL7::MessageParser.split_by_delimiter(post_mllp, @delimiter.segment)
     ary
   end
 

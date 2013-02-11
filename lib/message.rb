@@ -48,11 +48,11 @@ class HL7::Message
     @item_delim = "^"
     @element_delim = '|'
     @segment_delim = "\r"
-    @message_parser = HL7::MessageParser.new(@segment_delim)
-
     @delimiter = HL7::Message::Delimiter.new( @element_delim,
                                               @item_delim,
                                               @segment_delim)
+
+    @message_parser = HL7::MessageParser.new(@delimiter)
 
     parse( raw_msg ) if raw_msg
 
@@ -168,7 +168,7 @@ class HL7::Message
 
   # provide a HL7 spec version of the message
   def to_hl7
-    @segments.collect { |s| s if s.to_s.length > 0 }.join( @segment_delim )
+    @segments.collect { |s| s if s.to_s.length > 0 }.join( @delimiter.segment )
   end
 
   # provide the HL7 spec version of the message wrapped in MLLP

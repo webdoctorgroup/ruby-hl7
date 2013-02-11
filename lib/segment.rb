@@ -36,10 +36,7 @@ class HL7::Message::Segment
     @field_total = 0
     @is_child = false
 
-    delims = [ delims ].flatten
-
-    @element_delim = ( delims.length>0 ) ? delims[0] : "|"
-    @item_delim = ( delims.length>1 ) ? delims[1] : "^"
+    setup_delimiters delims
 
     @elements = elements_from_segment(raw_segment)
 
@@ -161,6 +158,13 @@ class HL7::Message::Segment
   private
   def self.singleton #:nodoc:
     class << self; self end
+  end
+
+  def setup_delimiters(delims)
+    delims = [ delims ].flatten
+
+    @element_delim = ( delims.length>0 ) ? delims[0] : "|"
+    @item_delim = ( delims.length>1 ) ? delims[1] : "^"
   end
 
   # DSL element to define a segment's sort weight
