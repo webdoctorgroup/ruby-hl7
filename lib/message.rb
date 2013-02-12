@@ -190,9 +190,7 @@ class HL7::Message
         s.set_id = last.set_id.to_i + 1
       end
 
-      if s.has_children?
-        sequence_segments( s )
-      end
+      sequence_segments( s ) if s.has_children?
 
       last = s
     end

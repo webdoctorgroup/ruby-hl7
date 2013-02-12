@@ -43,3 +43,11 @@ end
 class HL7::InvalidDataError < HL7::Exception
 end
 
+require 'message_parser'
+require 'message'
+require 'segment_list_storage'
+require 'segment_generator'
+require 'segment'
+
+require 'core_ext/date_time'
+require 'core_ext/string'

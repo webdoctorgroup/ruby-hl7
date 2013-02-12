@@ -27,7 +27,7 @@ class HL7::Message::SegmentGenerator
   end
 
   def valid_segments_parts?
-    return true if seg_parts && seg_parts.length > 0
+    return true if @seg_parts && @seg_parts.length > 0
 
     if HL7.ParserConfig[:empty_segment_is_error]
       text_error = "empty segment is an error per configuration setting"
@@ -39,7 +39,7 @@ class HL7::Message::SegmentGenerator
 
   def build
     klass = get_segment_class
-    new_seg = klass.new( element, [delimiter.element, delimiter.item] )
+    new_seg = klass.new( @element, [@delimiter.element, @delimiter.item] )
     new_seg
   end
 

@@ -86,9 +86,6 @@ RSpec::Core::RakeTask.new(:spec_with_simplecov) do |spec|
   spec.pattern = 'spec/**/*.rb'
 end
 
-  # t.threshold = 97.13
-  # t.index_html = 'coverage/index.html'
-
 RDoc::Task.new do |rd|
   rd.main = "README.rdoc"
   rd.rdoc_files.include("README.rdoc", "LICENSE", "lib/**/*.rb")
