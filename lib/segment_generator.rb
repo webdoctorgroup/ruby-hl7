@@ -30,8 +30,7 @@ class HL7::Message::SegmentGenerator
     return true if @seg_parts && @seg_parts.length > 0
 
     if HL7.ParserConfig[:empty_segment_is_error]
-      text_error = "empty segment is an error per configuration setting"
-      raise HL7::ParseError.new(text_error)
+      raise HL7::EmptySegmentNotAllowed
     else
       return false
     end

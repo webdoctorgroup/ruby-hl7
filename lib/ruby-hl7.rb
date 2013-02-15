@@ -43,6 +43,11 @@ end
 class HL7::InvalidDataError < HL7::Exception
 end
 
+# Attempting to add an empty segment
+# This error per configuration setting
+class HL7::EmptySegmentNotAllowed < HL7::ParseError
+end
+
 require 'message_parser'
 require 'message'
 require 'segment_list_storage'

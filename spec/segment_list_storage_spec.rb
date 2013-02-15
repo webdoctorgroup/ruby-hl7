@@ -8,31 +8,29 @@ class SegmentWithChildren < HL7::Message::Segment
 end
 
 describe HL7::Message::SegmentListStorage do
-  describe "Adding childs using has_children and add_child_type" do
+  describe "Adding children has_children and add_child_type" do
     subject do
       segment_instance = segment_class.new
-      methods = [:accepts?, :child_types, :children].each do |m|
-        segment_instance.respond_to?(m).should be_true
+      methods = [:accepts?, :child_types, :children].each do |method|
+        segment_instance.respond_to?(method).should be_true
       end
     end
 
     context "when child_types is not present" do
       let(:segment_class){ SegmentNoChildren }
 
-      it "should call the has_children method" do
+      it "by adding add_child_type should respond to the children methods" do
         segment_instance = segment_class.new
         segment_instance.respond_to?(:children).should be_false
-
         segment_class.add_child_type(:OBR)
         subject
-
       end
     end
 
     context "when child_types is present" do
       let(:segment_class){ SegmentWithChildren }
 
-      it "should call the has_children method" do
+      it "should respond to the children methods" do
         subject
       end
     end
