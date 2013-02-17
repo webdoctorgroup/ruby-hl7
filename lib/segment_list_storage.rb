@@ -2,6 +2,8 @@
 # has_children(child_types) defines three methods dynamically.
 
 module HL7::Message::SegmentListStorage
+  attr_reader :child_types
+
   def add_child_type(child_type)
     if @child_types
       @child_types << child_type.to_sym
@@ -18,16 +20,16 @@ module HL7::Message::SegmentListStorage
 
     define_method_child_types
     define_method_children
-    define_method_accepts child_types
+    define_method_accepts
   end
 
   def define_method_child_types
     define_method(:child_types) do
-      @child_types
+      self.class.child_types
     end
   end
 
-  def define_method_accepts(child_types)
+  def define_method_accepts
     self.class_eval do
       define_method('accepts?') do |t|
         t = t.to_sym if t.respond_to?(:to_sym)

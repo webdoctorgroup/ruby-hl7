@@ -4,10 +4,19 @@ class SegmentNoChildren< HL7::Message::Segment
 end
 
 class SegmentWithChildren < HL7::Message::Segment
-  has_children [:NTE,:OBX,:ORC,:SPM]
+  has_children [:NTE,:ORC,:SPM]
 end
 
 describe HL7::Message::SegmentListStorage do
+  describe "self#add_child_type" do
+    it "should allow to add a new segment type as child" do
+      SegmentWithChildren.add_child_type :OBR
+      segment = SegmentWithChildren.new
+      segment.accepts?(:OBR).should be_true
+      segment.child_types.should include :OBR
+    end
+  end
+
   describe "Adding children has_children and add_child_type" do
     subject do
       segment_instance = segment_class.new
