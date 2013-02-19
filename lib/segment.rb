@@ -19,11 +19,18 @@
 #
 class HL7::Message::Segment
   extend HL7::Message::SegmentListStorage
+  include HL7::Message::SegmentFields
 
   attr :segment_parent, true
   attr :element_delim
   attr :item_delim
   attr :segment_weight
+
+  METHOD_MISSING_FOR_INITIALIZER = <<-END
+    def method_missing( sym, *args, &blk )
+      __seg__.send( sym, args, blk )
+    end
+  END
 
   # setup a new HL7::Message::Segment
   # raw_segment:: is an optional String or Array which will be used as the
@@ -48,13 +55,7 @@ class HL7::Message::Segment
       callctx.__seg__(self)
       # TODO: find out if this pollutes the calling namespace permanently...
 
-      to_do = <<-END
-      def method_missing( sym, *args, &blk )
-        __seg__.send( sym, args, blk )
-      end
-      END
-
-      eval( to_do, blk.binding )
+      eval( METHOD_MISSING_FOR_INITIALIZER, blk.binding )
       yield self
       eval( "class << self; remove_method :method_missing;end", blk.binding )
     end
@@ -108,13 +109,11 @@ class HL7::Message::Segment
     if sym.to_s.include?( "=" )
       write_field( base_sym, args )
     else
-
       if args.length > 0
         write_field( base_sym, args.flatten.select { |arg| arg } )
       else
         read_field( base_sym )
       end
-
     end
   end
 
@@ -183,115 +182,8 @@ class HL7::Message::Segment
     end
   end
 
-  # define a field alias
-  # * name is the alias itself (required)
-  # * options is a hash of parameters
-  #   * :id is the field number to reference (optional, auto-increments from 1
-  #      by default)
-  #   * :blk is a validation proc (optional, overrides the second argument)
-  # * blk is an optional validation/convertion proc which MUST take a parameter
-  #   and always return a value for the field (it will be used on read/write
-  #   calls)
-  def self.add_field( name, options={}, &blk )
-    options = { :idx =>-1, :blk =>blk}.merge!( options )
-    name ||= :id
-    namesym = name.to_sym
-    @field_cnt ||= 1
-    if options[:idx] == -1
-      options[:idx] = @field_cnt # provide default auto-incrementing
-    end
-    @field_cnt = options[:idx].to_i + 1
-
-    singleton.module_eval do
-      @fields ||= {}
-      @fields[ namesym ] = options
-    end
-
-    self.class_eval <<-END
-      def #{name}(val=nil)
-        unless val
-          read_field( :#{namesym} )
-        else
-          write_field( :#{namesym}, val )
-          val # this matches existing n= method functionality
-        end
-      end
-
-      def #{name}=(value)
-        write_field( :#{namesym}, value )
-      end
-    END
-  end
-
-  def self.fields #:nodoc:
-    singleton.module_eval do
-      (@fields ||= [])
-    end
-  end
-
   def self.convert_to_ts(value) #:nodoc:
     value.respond_to?(:to_hl7) ? value.to_hl7 : value
   end
 
-  def field_info( name ) #:nodoc:
-    field_blk = nil
-    idx = name # assume we've gotten a fixnum
-    unless name.kind_of?( Fixnum )
-      fld_info = self.class.fields[ name ]
-      idx = fld_info[:idx].to_i
-      field_blk = fld_info[:blk]
-    end
-
-    [ idx, field_blk ]
-  end
-
-  def read_field( name ) #:nodoc:
-    idx, field_blk = field_info( name )
-    return nil unless idx
-    return nil if (idx >= @elements.length)
-
-    ret = @elements[ idx ]
-    ret = ret.first if (ret.kind_of?(Array) && ret.length == 1)
-    ret = field_blk.call( ret ) if field_blk
-    ret
-  end
-
-  def write_field( name, value ) #:nodoc:
-    idx, field_blk = field_info( name )
-    return nil unless idx
-
-    if (idx >= @elements.length)
-      # make some space for the incoming field, missing items are assumed to
-      # be empty, so this is valid per the spec -mg
-      missing = ("," * (idx-@elements.length)).split(',',-1)
-      @elements += missing
-    end
-
-    value = value.first if (value && value.kind_of?(Array) && value.length == 1)
-    value = field_blk.call( value ) if field_blk
-    @elements[ idx ] = value.to_s
-  end
-
-  @elements = []
-
 end
-
-
-# Provide a catch-all information preserving segment
-# * nb: aliases are not provided BUT you can use the numeric element accessor
-#
-#  seg = HL7::Message::Segment::Default.new
-#  seg.e0 = "NK1"
-#  seg.e1 = "SOMETHING ELSE"
-#  seg.e2 = "KIN HERE"
-#
-class HL7::Message::Segment::Default < HL7::Message::Segment
-  def initialize(raw_segment="", delims=[])
-    segs = [] if (raw_segment == "")
-    segs ||= raw_segment
-    super( segs, delims )
-  end
-end
-
-# load our segments
-Dir["#{File.dirname(__FILE__)}/segments/*.rb"].each { |ext| load ext }
