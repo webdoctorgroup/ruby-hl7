@@ -27,7 +27,7 @@ class HL7::Message::Segment::ORC < HL7::Message::Segment
   add_field :entering_device
   add_field :action_by
   add_field :advanced_beneficiary_notice_code
-  add_field :ordering_facility_name, :idx => 21
+  add_field :ordering_facility_name
   add_field :ordering_facility_address
   add_field :ordering_facility_phone_number
   add_field :ordering_provider_address
