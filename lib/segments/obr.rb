@@ -64,4 +64,5 @@ class HL7::Message::Segment::OBR < HL7::Message::Segment
   add_field :filler_supplemental_service_info
   add_field :medically_necessary_dup_procedure_reason #longest method name ever. sry.
   add_field :result_handling
+  add_field :parent_universal_service_identifier
 end
