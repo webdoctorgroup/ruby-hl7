@@ -45,8 +45,12 @@ class HL7::Message::Segment::PV1 < HL7::Message::Segment
   add_field :account_status
   add_field :pending_location
   add_field :prior_temporary_location
-  add_field :admit_date
-  add_field :discharge_date
+  add_field :admit_date do |value|
+    convert_to_ts(value)
+  end
+  add_field :discharge_date do |value|
+    convert_to_ts(value)
+  end
   add_field :current_patient_balance
   add_field :total_charges
   add_field :total_adjustments
