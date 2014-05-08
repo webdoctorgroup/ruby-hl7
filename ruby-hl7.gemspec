@@ -16,58 +16,9 @@ Gem::Specification.new do |s|
     "LICENSE",
      "README.rdoc"
   ]
-  s.files = [
-    "lib/ruby-hl7.rb",
-     "lib/segments/err.rb",
-     "lib/segments/evn.rb",
-     "lib/segments/msa.rb",
-     "lib/segments/msh.rb",
-     "lib/segments/nk1.rb",
-     "lib/segments/nte.rb",
-     "lib/segments/obr.rb",
-     "lib/segments/obx.rb",
-     "lib/segments/orc.rb",
-     "lib/segments/oru.rb",
-     "lib/segments/pid.rb",
-     "lib/segments/pv1.rb",
-     "lib/segments/pv2.rb",
-     "lib/segments/qrd.rb",
-     "lib/segments/qrf.rb",
-     "lib/segments/sft.rb",
-     "lib/segments/spm.rb",
-     "lib/string.rb",
-     "lib/test/hl7_messages.rb",
-     "test_data/adt_a01.hl7",
-     "test_data/cerner/cerner_bordetella.hl7",
-     "test_data/cerner/cerner_en.hl7",
-     "test_data/cerner/cerner_lead.hl7",
-     "test_data/cerner/cerner_sequential.hl7",
-     "test_data/empty-batch.hl7",
-     "test_data/empty.hl7",
-     "test_data/empty_segments.hl7",
-     "test_data/lotsunknowns.hl7",
-     "test_data/nist/ORU_R01_2.5.1_SampleTestCase1.er7",
-     "test_data/nist/ORU_R01_2.5.1_SampleTestCase2.er7",
-     "test_data/nist/ORU_R01_2.5.1_SampleTestCase3.er7",
-     "test_data/nist/ORU_R01_2.5.1_SampleTestCase4.er7",
-     "test_data/nist/ORU_R01_2.5.1_SampleTestCase5.er7",
-     "test_data/nist/ORU_R01_2.5.1_SampleTestCase6.er7",
-     "test_data/obxobr.hl7",
-     "test_data/realm/realm-animal-rabies.hl7",
-     "test_data/realm/realm-bad-batch.hl7",
-     "test_data/realm/realm-batch.hl7",
-     "test_data/realm/realm-campylobacter-jejuni.hl7",
-     "test_data/realm/realm-cj-badloinc.hl7",
-     "test_data/realm/realm-cj-joeslab.hl7",
-     "test_data/realm/realm-cj.hl7",
-     "test_data/realm/realm-err.hl7",
-     "test_data/realm/realm-hepatitis-c-virus.hl7",
-     "test_data/realm/realm-lead-laboratory-result.hl7",
-     "test_data/realm/realm-minimal-message.hl7",
-     "test_data/rqi_r04.hl7",
-     "test_data/test.hl7",
-     "test_data/test2.hl7"
-  ]
+ 
+  s.files         = `git ls-files`.split "\n"
+  s.test_files    = `git ls-files -- {spec}/*`.split "\n"
   s.homepage = %q{http://github.com/ruby-hl7/ruby-hl7}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
@@ -80,14 +31,14 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<rake>, [">= 0.8.7"])
+      s.add_runtime_dependency(%q<rake>, [">= 10.0.0"])
       s.add_runtime_dependency(%q<rubyforge>, [">= 2.0.4"])
     else
-      s.add_dependency(%q<rake>, [">= 0.8.7"])
+      s.add_dependency(%q<rake>, [">= 10.0.0"])
       s.add_dependency(%q<rubyforge>, [">= 2.0.4"])
     end
   else
-    s.add_dependency(%q<rake>, [">= 0.8.7"])
+    s.add_dependency(%q<rake>, [">= 10.0.0"])
     s.add_dependency(%q<rubyforge>, [">= 2.0.4"])
   end
 end
