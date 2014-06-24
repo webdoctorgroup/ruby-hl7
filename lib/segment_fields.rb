@@ -1,6 +1,6 @@
 #  SegmentFields
 #  class HL7::Message::Segment::NK1 < HL7::Message::Segment
-#    wieght 100 # segments are sorted ascendingly
+#    weight 100 # segments are sorted ascendingly
 #    add_field :something_you_want       # assumes :idx=>1
 #    add_field :something_else, :idx=>6  # :idx=>6 and field count=6
 module HL7::Message::SegmentFields
