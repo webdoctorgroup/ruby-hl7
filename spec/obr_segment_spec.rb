@@ -4,7 +4,7 @@ require 'spec_helper'
 describe HL7::Message::Segment::OBR do
   context 'general' do
     before :all do
-      @base = "OBR|2|^USSSA|0000000567^USSSA|37956^CT ABDOMEN^LN|||199405021550|||||||||||||0000763||||NMR|P||||||R/O TUMOR|202300&BAKER&MARK&E|||01&LOCHLEAR&JUDY"
+      @base = "OBR|2|^USSSA|0000000567^USSSA|37956^CT ABDOMEN^LN|||199405021550|||||||||||||0000763||||NMR|P||||||R/O TUMOR|202300&BAKER&MARK&E|||01&LOCHLEAR&JUDY|||||||||||||||123"
       @obr = HL7::Message::Segment::OBR.new @base
     end
 
@@ -36,6 +36,10 @@ describe HL7::Message::Segment::OBR do
 
     it 'supports the reason_for_study method' do
       @obr.reason_for_study.should == "R/O TUMOR"
+    end
+
+    it 'supports the parent_universal_service_identifier method' do
+      @obr.parent_universal_service_identifier.should == "123"
     end
   end
 end
