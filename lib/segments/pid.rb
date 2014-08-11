@@ -39,11 +39,15 @@ class HL7::Message::Segment::PID < HL7::Message::Segment
   add_field :citizenship
   add_field :vet_status
   add_field :nationality
-  add_field :death_date
+  add_field :death_date do |value|
+    convert_to_ts(value)
+  end
   add_field :death_indicator
   add_field :id_unknown_indicator
   add_field :id_readability_code
-  add_field :last_update_date
+  add_field :last_update_date do |value|
+    convert_to_ts(value)
+  end
   add_field :last_update_facility
   add_field :species_code
   add_field :breed_code
