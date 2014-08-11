@@ -10,17 +10,14 @@ Examples can be found in HL7::Message.
 The version id can be found in the HL7::VERSION constant.
 
 * Git:          http://github.com/ruby-hl7/ruby-hl7.git
-* Docs:         http://ruby-hl7.rubyforge.org
+* Docs:         http://rubydoc.info/gems/ruby-hl7/1.0.3/frames
 * Rubygems:     https://rubygems.org/gems/ruby-hl7
-* Rubyforge:    http://rubyforge.org/projects/ruby-hl7
 
 Lists
 
-* Developers: mailto:ruby-hl7-devel@rubyforge.org
-* Users: mailto:ruby-hl7-users@rubyforge.org
 * Google group: http://groups.google.com/group/ruby-hl7
 
-Copyright (C) 2006-2010 Mark Guzman
+Copyright (C) 2006-2014 Mark Guzman
 
 Maintained by the Collaborative Software Initiative
 
