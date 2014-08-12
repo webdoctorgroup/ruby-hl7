@@ -29,5 +29,7 @@ class HL7::Message::Segment::OBX < HL7::Message::Segment
     convert_to_ts(value)
   end
   add_field :performing_organization_name, :idx => 23
+  add_field :performing_organization_address, :idx => 24
+  add_field :performing_organization_medical_director, :idx => 25
 end
 
