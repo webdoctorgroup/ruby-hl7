@@ -21,6 +21,8 @@ describe HL7::Message::Segment::MSH do
       msh = HL7::Message::Segment::MSH.new
       msh.sending_facility="A Facility"
       msh.sending_facility.should == 'A Facility'
+      msh.time = DateTime.iso8601('20010203T040506')
+      msh.time.should == '20010203040506'
     end
   end
 end
