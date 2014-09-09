@@ -5,18 +5,18 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ruby-hl7}
-  s.version = "1.0.3"
+  s.version = "1.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mark Guzman"]
-  s.date = %q{2011-01-25}
+  s.date = %q{2014-09-09}
   s.description = %q{A simple library to parse and generate HL7 2.x messages}
   s.email = %q{ruby-hl7@googlegroups.com}
   s.extra_rdoc_files = [
     "LICENSE",
      "README.rdoc"
   ]
- 
+
   s.files         = `git ls-files`.split "\n"
   s.test_files    = `git ls-files -- {spec}/*`.split "\n"
   s.homepage = %q{http://github.com/ruby-hl7/ruby-hl7}
