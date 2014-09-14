@@ -38,7 +38,7 @@ describe 'String extension' do
   end
 
   it 'should respond_to :hl7_batch?' do
-    @batch_message.hl7_batch?.should be_true
+    @batch_message.hl7_batch?.should be true
     @plain_message.should respond_to(:hl7_batch?)
   end
 
