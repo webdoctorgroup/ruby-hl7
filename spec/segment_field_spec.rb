@@ -4,6 +4,7 @@ require 'spec_helper'
 class MockSegment < HL7::Message::Segment
   weight 1
   add_field :no_block
+  alias_field :no_block_alias, :no_block
   add_field :validating do |value|
     value == "bad" ? nil : value
   end
@@ -59,6 +60,33 @@ describe HL7::Message::Segment do
 
       msg.e3 = "empty"
       msg.e3.should == "empty"
+    end
+  end
+
+  describe '#alias_field' do
+    context 'with a valid field' do
+      it 'uses alias field names' do
+        msg = MockSegment.new(@base)
+        msg.no_block.should == "no_block"
+        msg.no_block_alias.should == "no_block"
+      end
+    end
+
+    context 'with an invalid field' do
+
+      class MockInvalidSegment < HL7::Message::Segment
+        weight 1
+        add_field :no_block
+        alias_field :no_block_alias, :invalid_field
+        add_field :second
+        add_field :third
+      end
+
+
+      it 'throws an error when the field is invalid' do
+        msg = MockInvalidSegment.new(@base)
+        lambda{  msg.no_block_alias }.should raise_error
+      end
     end
   end
 end
