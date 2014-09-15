@@ -8,5 +8,5 @@ gem 'technicalpickles-jeweler'
 
 group :test, :development do
   gem 'simplecov'
-  gem 'rspec', '> 2.1.0'
+  gem 'rspec', '~> 2.99.0'
 end

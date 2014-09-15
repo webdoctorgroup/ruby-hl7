@@ -12,7 +12,7 @@ describe HL7::Message::Segment do
   describe 'is_child_segment?' do
     let(:segment){ HL7::Message::Segment.new "MSA|AR|ZZ9380 ERR" }
     it "return false when is not set" do
-      segment.is_child_segment?.should be_false
+      segment.is_child_segment?.should be false
     end
   end
 
