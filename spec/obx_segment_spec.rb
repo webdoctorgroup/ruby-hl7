@@ -1,6 +1,5 @@
 # encoding: UTF-8
 require 'spec_helper'
-require 'pry'
 describe HL7::Message::Segment::OBX do
   context 'general' do
     before :all do
