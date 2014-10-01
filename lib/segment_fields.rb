@@ -56,6 +56,24 @@ module HL7::Message::SegmentFields
         (@fields ||= [])
       end
     end
+
+    def alias_field(new_field_name, old_field_name)
+      self.class_eval <<-END
+        def #{new_field_name}(val=nil)
+          raise HL7::InvalidDataError.new unless self.class.fields[:#{old_field_name}]
+          unless val
+            read_field( :#{old_field_name} )
+          else
+            write_field( :#{old_field_name}, val )
+            val # this matches existing n= method functionality
+          end
+        end
+
+        def #{new_field_name}=(value)
+          write_field( :#{old_field_name}, value )
+        end
+      END
+    end
   end
 
   def field_info( name ) #:nodoc:
