@@ -13,11 +13,13 @@ describe HL7::Message do
       msg[:OBR].should_not be_nil
       msg[:OBR].length.should == 3
       msg[:OBR][0].children.should_not be_nil
-      msg[:OBR][0].children.length.should == 5
+      msg[:OBR][0].children.length.should == 6
       msg[:OBR][1].children.should_not be_nil
       msg[:OBR][1].children.length.should == 3
       msg[:OBR][2].children.should_not be_nil
       msg[:OBR][2].children.length.should == 1
+      msg[:OBX][0].children.should_not be_nil
+      msg[:OBX][0].children.length.should == 1
 
       msg[:OBR][0].children.each do |x|
         x.should_not be_nil
