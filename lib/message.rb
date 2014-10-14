@@ -201,12 +201,12 @@ class HL7::Message
     raise HL7::ParseError.new( "no array to generate segments" ) unless ary.length > 0
 
     @parsing = true
-    last_seg = nil
+    segment_stack = []
     ary.each do |elm|
       if elm.slice(0,3) == "MSH"
         update_delimiters(elm)
       end
-      last_seg = generate_segment( elm, last_seg ) || last_seg
+      last_seg = generate_segment( elm, segment_stack ) || last_seg
     end
     @parsing = nil
   end
@@ -218,9 +218,9 @@ class HL7::Message
     @delimiter.element = @element_delim
   end
 
-  def generate_segment( elm, last_seg )
+  def generate_segment( elm, segment_stack )
     segment_generator = HL7::Message::SegmentGenerator.new( elm,
-                                                            last_seg,
+                                                            segment_stack,
                                                             @delimiter )
 
     return nil unless segment_generator.valid_segments_parts?
@@ -229,26 +229,30 @@ class HL7::Message
     new_seg = segment_generator.build
     new_seg.segment_parent = self
 
-    choose_segment_from(last_seg, new_seg, segment_generator.seg_name)
+    choose_segment_from(segment_stack, new_seg, segment_generator.seg_name)
   end
 
-  def choose_segment_from(last_seg, new_seg, seg_name)
-    if last_seg && last_seg.has_children? && last_seg.accepts?( seg_name )
-      last_seg.children << new_seg
-      new_seg.is_child_segment = true
+  def choose_segment_from(segment_stack, new_seg, seg_name)
 
-      last_seg
-    elsif last_seg && last_seg.has_children? && last_seg.children.last &&
-          last_seg.children.last.has_children? && last_seg.children.last.accepts?( seg_name )
-      last_seg_child = last_seg.children.last
-      last_seg_child.children << new_seg
-      new_seg.is_child_segment = true
+    # Segments have been previously seen
+    while(segment_stack.length > 0)
+      if segment_stack.last && segment_stack.last.has_children? && segment_stack.last.accepts?( seg_name )
+        # If a previous segment can accept the current segment as a child,
+        # add it to the previous segments children
+        segment_stack.last.children << new_seg
+        new_seg.is_child_segment = true
+        segment_stack << new_seg
+        break;
+      else
+        segment_stack.pop
+      end
+    end
 
-      last_seg
-    else
+    # Root of segment 'tree'
+    if segment_stack.length == 0
       @segments << new_seg
+      segment_stack << new_seg
       setup_segment_lookup_by_name( seg_name, new_seg)
-      new_seg
     end
   end
 
