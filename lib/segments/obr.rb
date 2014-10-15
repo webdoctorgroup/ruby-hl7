@@ -30,8 +30,8 @@ class HL7::Message::Segment::OBR < HL7::Message::Segment
   add_field :order_callback_phone_number
   add_field :placer_field_1
   add_field :placer_field_2
-  add_field :filer_field_1
-  add_field :filer_field_2
+  add_field :filler_field_1
+  add_field :filler_field_2
   add_field :results_status_change_date do |value|
     convert_to_ts(value)
   end
