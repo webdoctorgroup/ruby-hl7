@@ -1,5 +1,11 @@
 ## Overview
 
+**Version 1.1.1**
+Included in this release:
+
+- https://github.com/ruby-hl7/ruby-hl7/pull/48
+- https://github.com/ruby-hl7/ruby-hl7/pull/44
+
 **Version 1.1.0**
 Included in this release:
 - https://github.com/ruby-hl7/ruby-hl7/pull/7
