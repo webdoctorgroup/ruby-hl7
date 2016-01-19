@@ -34,5 +34,8 @@ class HL7::Message::Segment::OBX < HL7::Message::Segment
   add_field :performing_organization_name
   add_field :performing_organization_address
   add_field :performing_organization_medical_director
-end
 
+  def correction?
+    observation_result_status == "C"
+  end
+end

@@ -1,5 +1,6 @@
 # encoding: UTF-8
 require 'spec_helper'
+
 describe HL7::Message::Segment::OBX do
   context 'general' do
     before :all do
@@ -41,6 +42,27 @@ describe HL7::Message::Segment::OBX do
         obx.observation_sub_id = "2"
         obx.observation_value = "SOMETHING HAPPENned"
       end.should_not raise_error
+    end
+
+    describe "#correction?" do
+      let(:obx) { HL7::Message::Segment::OBX.new data  }
+      subject { obx.correction? }
+
+      context "when is a correction" do
+        let(:data) {
+          'OBX|1|ST|123456^AA OBSERVATION^L^4567890^FIRST OBSERVATION^LN||42|ug/dL^Micrograms per Deciliter^UCUM|<10 ug/dL|H|||C||||OMG'
+        }
+
+        it { is_expected.to be true }
+      end
+
+      context "when is not a correction" do
+        let(:data) {
+          'OBX|1|ST|123456^AA OBSERVATION^L^4567890^FIRST OBSERVATION^LN||42|ug/dL^Micrograms per Deciliter^UCUM|<10 ug/dL|H|||F||||OMG'
+        }
+
+        it { is_expected.to be false }
+      end
     end
   end
 end
