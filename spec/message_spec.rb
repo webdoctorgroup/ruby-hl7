@@ -38,5 +38,16 @@ describe HL7::Message do
 
       it { is_expected.to be false }
     end
+
+    context "when there are no results (OBX) segments" do
+      let(:data) {
+        [
+          'OBR|1|A241Z^LAB||123456^A TEST^L|||201508181431||1234||||None|201502181432||||OMG123||||20150818143300',
+          'OBR|2|A241Z^LAB||123456^A TEST^L|||201508181431||1234||||None|201502181432||||OMG123||||20150818143300'
+        ].join("\r")
+      }
+
+      it { is_expected.to be false }
+    end
   end
 end
