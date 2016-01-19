@@ -198,7 +198,7 @@ class HL7::Message
 
   # Checks if any of the results is a correction
   def correction?
-    Array.new(self[:OBX]).map(&:correction?).any?
+    Array(self[:OBX]).any?(&:correction?)
   end
 
   private
