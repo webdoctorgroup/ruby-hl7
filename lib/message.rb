@@ -196,6 +196,11 @@ class HL7::Message
     end
   end
 
+  # Checks if any of the results is a correction
+  def correction?
+    Array.new(self[:OBX]).map(&:correction?).any?
+  end
+
   private
   def generate_segments( ary )
     raise HL7::ParseError.new( "no array to generate segments" ) unless ary.length > 0
