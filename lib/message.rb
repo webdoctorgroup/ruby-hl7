@@ -270,7 +270,7 @@ class HL7::Message
     end
   end
 
-   def get_symbol_from_name(seg_name)
+  def get_symbol_from_name(seg_name)
     seg_name.to_s.strip.length > 0 ? seg_name.to_sym : nil
   end
 
