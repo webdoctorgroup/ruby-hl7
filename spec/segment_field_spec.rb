@@ -67,8 +67,8 @@ describe HL7::Message::Segment do
     context 'with a valid field' do
       it 'uses alias field names' do
         msg = MockSegment.new(@base)
-        msg.no_block.should == "no_block"
-        msg.no_block_alias.should == "no_block"
+        msg.no_block.should eq "no_block"
+        msg.no_block_alias.should eq "no_block"
       end
     end
 
