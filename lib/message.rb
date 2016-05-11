@@ -146,7 +146,7 @@ class HL7::Message
     (@segments ||= []) << value
     name = value.class.to_s.gsub("HL7::Message::Segment::", "").to_sym
     (@segments_by_name[ name ] ||= []) << value
-    sequence_segments unless @parsing # let's auto-set the set-id as we go
+    sequence_segments unless defined?(@parsing) && @parsing # let's auto-set the set-id as we go
   end
 
   # yield each segment in the message
