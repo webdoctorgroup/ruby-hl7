@@ -34,10 +34,10 @@ class HL7::Message
   extend HL7::MessageBatchParser
 
   attr_reader :message_parser
-  attr :element_delim
-  attr :item_delim
-  attr :segment_delim
-  attr :delimiter
+  attr_reader :element_delim
+  attr_reader :item_delim
+  attr_reader :segment_delim
+  attr_reader :delimiter
 
   # setup a new hl7 message
   # raw_msg:: is an optional object containing an hl7 message
