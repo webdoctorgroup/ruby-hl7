@@ -38,11 +38,11 @@ describe HL7::Message do
     end
 
     it 'only parses String and Enumerable data' do
-      lambda { msg = HL7::Message.parse :MSHthis_shouldnt_parse_at_all }.should raise_error(HL7::ParseError)
+      lambda { HL7::Message.parse :MSHthis_shouldnt_parse_at_all }.should raise_error(HL7::ParseError)
     end
 
     it 'parses empty strings' do
-      lambda { msg = HL7::Message.new @empty_txt }.should_not raise_error
+      lambda { HL7::Message.new @empty_txt }.should_not raise_error
     end
 
     it 'converts to strings' do
@@ -177,7 +177,7 @@ describe HL7::Message do
       nte = HL7::Message::Segment::NTE.new
       msg << nte
       nte2 = HL7::Message::Segment::NTE.new
-      msg << nte
+      msg << nte2
       msh.sending_app = "TEST"
 
       initial = msg.to_s
@@ -275,7 +275,6 @@ describe HL7::Message do
       #multible obr's with multiple obx's
       msg = HL7::Message.parse( @simple_msh_txt )
       orig_output = msg.to_hl7
-      orig_obx_cnt = msg[:OBX].length
       (1..10).each do |obr_id|
         obr = HL7::Message::Segment::OBR.new
         msg << obr
@@ -314,7 +313,7 @@ describe HL7::Message do
     end
 
     it 'can parse an empty segment' do
-      lambda { msg = HL7::Message.new @empty_segments_txt }.should_not raise_error
+      lambda { HL7::Message.new @empty_segments_txt }.should_not raise_error
     end
   end
 end
