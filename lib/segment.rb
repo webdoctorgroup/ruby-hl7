@@ -144,6 +144,12 @@ class HL7::Message::Segment
     @is_child_segment = val
   end
 
+  # yield each element in the segment
+  def each # :yields: element
+    return unless @elements
+    @elements.each { |e| yield e }
+  end
+
   # get the length of the segment (number of fields it contains)
   def length
     0 unless @elements
