@@ -4,7 +4,7 @@ require 'spec_helper'
 describe HL7::Message::Segment::SFT do
   context 'general' do
     before :all do
-      @base_sft = 'SFT|1|Level Seven Healthcare Software, Inc.^L^^^^&2.16.840.1.113883.19.4.6^ISO^XX^^^1234|1.2|An Lab System|56734||20080817'
+      @base_sft = 'SFT|Level Seven Healthcare Software, Inc.^L^^^^&2.16.840.1.113883.19.4.6^ISO^XX^^^1234|1.2|An Lab System|56734||20080817'
     end
 
     it 'creates an SFT segment' do
