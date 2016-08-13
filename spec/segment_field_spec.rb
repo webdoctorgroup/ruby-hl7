@@ -63,6 +63,24 @@ describe HL7::Message::Segment do
     end
   end
 
+  describe '#[]' do
+    it 'allows index access to the segment' do
+      msg = HL7::Message::Segment.new(@base)
+      msg[0].should == 'Mock'
+      msg[1].should == 'no_block'
+      msg[2].should == 'validated'
+      msg[3].should == 'converted'
+    end
+  end
+
+  describe '#[]=' do
+    it 'allows index assignment to the segment' do
+      msg = HL7::Message::Segment.new(@base)
+      msg[0] = 'Kcom'
+      expect(msg[0]).to eq 'Kcom'
+    end
+  end
+
   describe '#alias_field' do
     context 'with a valid field' do
       it 'uses alias field names' do
