@@ -88,6 +88,14 @@ module HL7::Message::SegmentFields
     [ idx, field_blk ]
   end
 
+  def []( index )
+    @elements[index]
+  end
+
+  def []=( index, value )
+    @elements[index] = value.to_s
+  end
+
   def read_field( name ) #:nodoc:
     idx, field_blk = field_info( name )
     return nil unless idx
