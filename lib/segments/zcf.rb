@@ -1,4 +1,3 @@
-require 'ruby-hl7'
 class HL7::Message::Segment::ZCF < HL7::Message::Segment
   add_field :custom_field_1
   add_field :custom_field_2

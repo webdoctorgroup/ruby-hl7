@@ -78,6 +78,7 @@ end
 desc "Run all examples"
 RSpec::Core::RakeTask.new(:spec) do |spec|
   spec.pattern = 'spec/**/*.rb'
+  spec.ruby_opts = '-w'
 end
 
 desc "Run all examples with SimpleCov"

@@ -21,10 +21,10 @@ class HL7::Message::Segment
   extend HL7::Message::SegmentListStorage
   include HL7::Message::SegmentFields
 
-  attr :segment_parent, true
-  attr :element_delim
-  attr :item_delim
-  attr :segment_weight
+  attr_accessor :segment_parent
+  attr_reader :element_delim
+  attr_reader :item_delim
+  attr_reader :segment_weight
 
   METHOD_MISSING_FOR_INITIALIZER = <<-END
     def method_missing( sym, *args, &blk )

@@ -11,15 +11,15 @@ describe HL7::Message::Segment::SFT do
       lambda do
         sft = HL7::Message::Segment::SFT.new( @base_sft )
         sft.should_not be_nil
-        sft.to_s.should == @base_sft
+        sft.to_s.should eq @base_sft
       end.should_not raise_error
     end
 
     it 'allows access to an SFT segment' do
       lambda do
         sft = HL7::Message::Segment::SFT.new( @base_sft )
-        sft.software_product_name.should == 'An Lab System'
-        sft.software_install_date.should == '20080817'
+        sft.software_product_name.should eq 'An Lab System'
+        sft.software_install_date.should eq '20080817'
       end.should_not raise_error
     end
   end

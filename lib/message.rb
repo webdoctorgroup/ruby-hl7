@@ -34,10 +34,10 @@ class HL7::Message
   extend HL7::MessageBatchParser
 
   attr_reader :message_parser
-  attr :element_delim
-  attr :item_delim
-  attr :segment_delim
-  attr :delimiter
+  attr_reader :element_delim
+  attr_reader :item_delim
+  attr_reader :segment_delim
+  attr_reader :delimiter
 
   # setup a new hl7 message
   # raw_msg:: is an optional object containing an hl7 message
@@ -146,7 +146,7 @@ class HL7::Message
     (@segments ||= []) << value
     name = value.class.to_s.gsub("HL7::Message::Segment::", "").to_sym
     (@segments_by_name[ name ] ||= []) << value
-    sequence_segments unless @parsing # let's auto-set the set-id as we go
+    sequence_segments unless defined?(@parsing) && @parsing # let's auto-set the set-id as we go
   end
 
   # yield each segment in the message
@@ -270,7 +270,7 @@ class HL7::Message
     end
   end
 
-   def get_symbol_from_name(seg_name)
+  def get_symbol_from_name(seg_name)
     seg_name.to_s.strip.length > 0 ? seg_name.to_sym : nil
   end
 
