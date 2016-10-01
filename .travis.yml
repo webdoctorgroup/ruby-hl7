@@ -13,4 +13,4 @@ rvm:
   - 1.9.3
   - ruby-head
   - jruby-9.0.5.0
-  - rubinius-3.9
+  - rbx-3
