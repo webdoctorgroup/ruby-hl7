@@ -27,7 +27,7 @@ module HL7
     private
     
     def self.convert_to_ts(value) #:nodoc:
-      if value.is_a?(Time) or value.is_a?(Date)
+      if value.is_a?(Time) || value.is_a?(Date)
         value.to_hl7
       else
         value
