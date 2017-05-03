@@ -5,7 +5,7 @@ GEM
     git (1.2.5)
     json_pure (1.5.0)
     multi_json (1.5.0)
-    rake (10.0.3)
+    rake (10.5.0)
     rdoc (3.9.4)
     rspec (2.99.0)
       rspec-core (~> 2.99.0)
@@ -30,7 +30,7 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
-  rake (~> 10.0.3)
+  rake (~> 10.0)
   rdoc
   rspec (~> 2.99.0)
   rubyforge
@@ -38,4 +38,4 @@ DEPENDENCIES
   technicalpickles-jeweler
 
 BUNDLED WITH
-   1.12.3
+   1.13.6
