@@ -5,11 +5,16 @@ language: ruby
 matrix:
   allow_failures:
     - rvm: ruby-head
+sudo: required
+dist: trusty
+addons:
+  apt:
+    packages:
+      - haveged
 rvm:
   - 2.3.0
   - 2.2.0
   - 2.1.0
   - 2.0.0
   - 1.9.3
-  - ruby-head
   - jruby-9.1.5.0
