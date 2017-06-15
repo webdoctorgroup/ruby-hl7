@@ -4,6 +4,7 @@ module HL7
     add_field :set_id
     add_field :diagnosis_coding_method
     add_field :diagnosis_code
+    add_field :diagnosis_description
     add_field :diagnosis_date_time do |value|
       convert_to_ts(value)
     end
@@ -23,9 +24,9 @@ module HL7
     add_field :attestation_date_time do |value|
       convert_to_ts(value)
     end
-    
+
     private
-    
+
     def self.convert_to_ts(value) #:nodoc:
       if value.is_a?(Time) || value.is_a?(Date)
         value.to_hl7
