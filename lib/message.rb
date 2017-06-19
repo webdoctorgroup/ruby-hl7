@@ -78,12 +78,12 @@ class HL7::Message
   end
 
   # access a segment of the message
-  # index:: can be a Range, Fixnum or anything that
+  # index:: can be a Range, Integer or anything that
   #         responds to to_sym
   def []( index )
     ret = nil
 
-    if index.kind_of?(Range) || index.kind_of?(Fixnum)
+    if index.kind_of?(Range) || index.kind_of?(Integer)
       ret = @segments[ index ]
     elsif (index.respond_to? :to_sym)
       ret = @segments_by_name[ index.to_sym ]
@@ -94,7 +94,7 @@ class HL7::Message
   end
 
   # modify a segment of the message
-  # index:: can be a Range, Fixnum or anything that
+  # index:: can be a Range, Integer or anything that
   #         responds to to_sym
   # value:: an HL7::Message::Segment object
   def []=( index, value )
@@ -102,12 +102,12 @@ class HL7::Message
       raise HL7::Exception.new( "attempting to assign something other than an HL7 Segment" )
     end
 
-    if index.kind_of?(Range) || index.kind_of?(Fixnum)
+    if index.kind_of?(Range) || index.kind_of?(Integer)
       @segments[ index ] = value
     elsif index.respond_to?(:to_sym)
       (@segments_by_name[ index.to_sym ] ||= []) << value
     else
-      raise HL7::Exception.new( "attempting to use an indice that is not a Range, Fixnum or to_sym providing object" )
+      raise HL7::Exception.new( "attempting to use an indice that is not a Range, Integer or to_sym providing object" )
     end
 
     value.segment_parent = self
