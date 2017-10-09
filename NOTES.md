@@ -1,5 +1,18 @@
 ## Overview
 
+**Version 1.2.1**
+New segments:
+DG1
+
+https://github.com/ruby-hl7/ruby-hl7/pull/61
+https://github.com/ruby-hl7/ruby-hl7/pull/66
+https://github.com/ruby-hl7/ruby-hl7/pull/68
+https://github.com/ruby-hl7/ruby-hl7/pull/72
+https://github.com/ruby-hl7/ruby-hl7/pull/74
+
+Thanks to:
+@caseyprovost, @adamjubert, @vadeolu
+
 **Version 1.2.0**
 Included in this release:
 https://github.com/ruby-hl7/ruby-hl7/pull/52
