@@ -72,7 +72,7 @@ spec = Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.8.6'
   s.extra_rdoc_files = %w[README.rdoc LICENSE]
   s.add_dependency("rake", ">= #{RAKEVERSION}")
-  s.add_dependency("rubyforge", ">= #{::RubyForge::VERSION}")
+  s.add_development_dependency("rubyforge", ">= #{::RubyForge::VERSION}")
 end
 
 desc "Run all examples"
