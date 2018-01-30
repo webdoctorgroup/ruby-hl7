@@ -1,4 +1,18 @@
 ## Overview
+**Version 1.2.2**
+New segments:
+AIL
+AIP
+SCH
+
+Feature Updates
+https://github.com/ruby-hl7/ruby-hl7/pull/69
+https://github.com/ruby-hl7/ruby-hl7/pull/79
+https://github.com/ruby-hl7/ruby-hl7/pull/81
+https://github.com/ruby-hl7/ruby-hl7/pull/82
+https://github.com/ruby-hl7/ruby-hl7/pull/83
+
+Thanks to @finnhowell, @myokoym, and @mogox for contributions.
 
 **Version 1.2.1**
 New segments:
