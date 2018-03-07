@@ -25,4 +25,6 @@ class HL7::Message::Segment::SCH < HL7::Message::Segment
   add_field :parent_placer_appointment_id
   add_field :parent_filler_appointment_id
   add_field :filler_status_code
+  add_field :placer_order_number
+  add_field :filler_order_number
 end
