@@ -8,24 +8,24 @@ describe HL7::Message::Segment::AIP do
     end
 
     it 'creates an AIP segment' do
-      lambda do
+      expect do
         aip = HL7::Message::Segment::AIP.new( @base_aip )
-        aip.should_not be_nil
-        aip.to_s.should eq @base_aip
-      end.should_not raise_error
+        expect(aip).not_to be_nil
+        expect(aip.to_s).to eq @base_aip
+      end.not_to raise_error
     end
 
     it 'allows access to an AIP segment' do
-      lambda do
+      expect do
         aip = HL7::Message::Segment::AIP.new( @base_aip )
-        aip.set_id.should eq '1'
-        aip.segment_action_code.should eq 'U'
-        aip.personnel_resource_id.should eq 'JSB^ISON^Kathy^S'
-        aip.resource_role.should eq 'D^Doctor'
-        aip.start_date_time.should eq '20020108150000'
-        aip.duration.should eq '10'
-        aip.duration_units.should eq 'm^Minutes'
-      end.should_not raise_error
+        expect(aip.set_id).to eq '1'
+        expect(aip.segment_action_code).to eq 'U'
+        expect(aip.personnel_resource_id).to eq 'JSB^ISON^Kathy^S'
+        expect(aip.resource_role).to eq 'D^Doctor'
+        expect(aip.start_date_time).to eq '20020108150000'
+        expect(aip.duration).to eq '10'
+        expect(aip.duration_units).to eq 'm^Minutes'
+      end.not_to raise_error
     end
   end
 end

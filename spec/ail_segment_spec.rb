@@ -8,21 +8,21 @@ describe HL7::Message::Segment::AIL do
     end
 
     it 'creates an AIL segment' do
-      lambda do
+      expect do
         ail = HL7::Message::Segment::AIL.new( @base_ail )
-        ail.should_not be_nil
-        ail.to_s.should eq @base_ail
-      end.should_not raise_error
+        expect(ail).not_to be_nil
+        expect(ail.to_s).to eq @base_ail
+      end.not_to raise_error
     end
 
     it 'allows access to an AIL segment' do
-      lambda do
+      expect do
         ail = HL7::Message::Segment::AIL.new( @base_ail )
-        ail.set_id.should eq '1'
-        ail.segment_action_code.should eq 'A'
-        ail.location_resource_id.should eq 'OFFICE^^^OFFICE'
-        ail.location_type.should eq '^OFFICE^A4'
-      end.should_not raise_error
+        expect(ail.set_id).to eq '1'
+        expect(ail.segment_action_code).to eq 'A'
+        expect(ail.location_resource_id).to eq 'OFFICE^^^OFFICE'
+        expect(ail.location_type).to eq '^OFFICE^A4'
+      end.not_to raise_error
     end
   end
 end
