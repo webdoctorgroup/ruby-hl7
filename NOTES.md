@@ -1,4 +1,21 @@
 ## Overview
+
+**Version 1.2.3**
+New Segments:
+AIG
+AIS
+MRG
+RGS
+TQ1
+IN1
+
+https://github.com/ruby-hl7/ruby-hl7/pull/86
+https://github.com/ruby-hl7/ruby-hl7/pull/87
+
+
+Thanks to:
+@finnhowell, @rclavel
+
 **Version 1.2.2**
 New segments:
 AIL
