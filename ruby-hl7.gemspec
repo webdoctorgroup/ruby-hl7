@@ -26,19 +26,13 @@ Gem::Specification.new do |s|
   s.rubyforge_project = %q{ruby-hl7}
   s.rubygems_version = %q{1.4.2}
   s.summary = %q{Ruby HL7 Library}
+  s.license = "MIT"
 
-  if s.respond_to? :specification_version then
-    s.specification_version = 3
+  s.add_dependency 'rake', '~> 11.0'
+  s.add_dependency 'rdoc', '~> 3.9'
 
-    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<rake>, [">= 10.0.0"])
-      s.add_development_dependency(%q<rubyforge>, [">= 2.0.4"])
-    else
-      s.add_dependency(%q<rake>, [">= 10.0.0"])
-      s.add_development_dependency(%q<rubyforge>, [">= 2.0.4"])
-    end
-  else
-    s.add_dependency(%q<rake>, [">= 10.0.0"])
-    s.add_development_dependency(%q<rubyforge>, [">= 2.0.4"])
-  end
+  s.add_development_dependency 'bundler', '~> 1.15'
+  s.add_development_dependency 'simplecov', '~> 0.15'
+  s.add_development_dependency 'rspec', '~> 2.99'
+  s.add_development_dependency 'pry'
 end
