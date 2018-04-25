@@ -8,27 +8,27 @@ describe HL7::Message::Segment::IN1 do
     end
 
     it 'creates an IN1 segment' do
-      lambda do
+      expect do
         in1 = HL7::Message::Segment::IN1.new( @base_in1 )
-        in1.should_not be_nil
-        in1.to_s.should eq @base_in1
-      end.should_not raise_error
+        expect(in1).not_to be_nil
+        expect(in1.to_s).to eq @base_in1
+      end.not_to raise_error
     end
 
     it 'allows access to an IN1 segment' do
-      lambda do
+      expect do
         in1 = HL7::Message::Segment::IN1.new( @base_in1 )
-        in1.set_id.should eq '1'
-        in1.insurance_company_id.should eq '752'
-        in1.insurance_company_name.should eq 'ACORDIA NATIONAL'
-        in1.group_number.should eq 'A'
-        in1.group_name.should eq 'GRP'
-        in1.name_of_insured.should eq 'SMITH^JOHN'
-        in1.insureds_relationship_to_patient.should eq '19'
-        in1.insureds_date_of_birth.should eq '19700102'
-        in1.policy_number.should eq 'WC23732763278A'
-        in1.vip_indicator.should eq 'X'
-      end.should_not raise_error
+        expect(in1.set_id).to eq '1'
+        expect(in1.insurance_company_id).to eq '752'
+        expect(in1.insurance_company_name).to eq 'ACORDIA NATIONAL'
+        expect(in1.group_number).to eq 'A'
+        expect(in1.group_name).to eq 'GRP'
+        expect(in1.name_of_insured).to eq 'SMITH^JOHN'
+        expect(in1.insureds_relationship_to_patient).to eq '19'
+        expect(in1.insureds_date_of_birth).to eq '19700102'
+        expect(in1.policy_number).to eq 'WC23732763278A'
+        expect(in1.vip_indicator).to eq 'X'
+      end.not_to raise_error
     end
   end
 end
