@@ -4,7 +4,7 @@ require 'spec_helper'
 describe HL7::Message::Segment::PID do
   context 'general' do
     before :all do
-      @base = "PID|1||333||LastName^FirstName^MiddleInitial^SR^NickName||19760228|F||2106-3^White^HL70005^CAUC^Caucasian^L||||||||555.55|012345678||||||||||201011110924-0700|Y|||||||||"
+      @base = "PID|1||333||LastName^FirstName^MiddleInitial^SR^NickName||19760228|F||2106-3^White^HL70005^CAUC^Caucasian^L||AA||||||555.55|012345678||||||||||201011110924-0700|Y|||||||||"
     end
 
     it 'validates the admin_sex element' do
@@ -37,7 +37,7 @@ describe HL7::Message::Segment::PID do
       expect(pid.patient_alias).to eq ""
       expect(pid.race).to eq "2106-3^White^HL70005^CAUC^Caucasian^L"
       expect(pid.address).to eq ""
-      expect(pid.country_code).to eq ""
+      expect(pid.county_code).to eq "AA"
       expect(pid.phone_home).to eq ""
       expect(pid.phone_business).to eq ""
       expect(pid.primary_language).to eq ""
@@ -65,6 +65,14 @@ describe HL7::Message::Segment::PID do
       expect(pid.strain).to eq ""
       expect(pid.production_class_code).to eq ""
       expect(pid.tribal_citizenship).to eq ""
+    end
+
+    it "aliases the county_code field as country_code for backwards compatibility" do
+      pid = HL7::Message::Segment::PID.new @base
+      expect(pid.country_code).to eq "AA"
+
+      pid.country_code = "ZZ"
+      expect(pid.country_code).to eq "ZZ"
     end
   end
 end
