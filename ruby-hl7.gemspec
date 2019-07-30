@@ -28,11 +28,10 @@ Gem::Specification.new do |s|
   s.summary = %q{Ruby HL7 Library}
   s.license = "MIT"
 
-  s.add_dependency 'rake', '~> 11.0'
-  s.add_dependency 'rdoc', '~> 3.12'
-
   s.add_development_dependency 'bundler', '~> 1.17'
-  s.add_development_dependency 'simplecov', '~> 0.15'
-  s.add_development_dependency 'rspec', '~> 2.99'
   s.add_development_dependency 'pry'
+  s.add_development_dependency 'rake', '~> 11.0'
+  s.add_development_dependency 'rdoc', '~> 3.12'
+  s.add_development_dependency 'rspec', '~> 2.99'
+  s.add_development_dependency 'simplecov', '~> 0.15'
 end
