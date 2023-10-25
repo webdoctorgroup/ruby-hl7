@@ -1,5 +1,6 @@
 # This module includes methods for storing segments inside segments.
 # has_children(child_types) defines three methods dynamically.
+require_relative 'message'
 
 module HL7::Message::SegmentListStorage
   attr_reader :child_types

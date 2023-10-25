@@ -6,6 +6,8 @@
 #  seg.e1 = "SOMETHING ELSE"
 #  seg.e2 = "KIN HERE"
 #
+require_relative 'message'
+
 class HL7::Message::Segment::Default < HL7::Message::Segment
   def initialize(raw_segment="", delims=[])
     segs = [] if (raw_segment == "")

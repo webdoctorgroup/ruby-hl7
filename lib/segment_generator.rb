@@ -1,4 +1,6 @@
 # Class for grouping the messages delimiter
+require_relative 'message'
+
 class HL7::Message::Delimiter
   attr_accessor :item, :element, :segment
 

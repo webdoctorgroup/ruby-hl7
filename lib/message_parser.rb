@@ -1,3 +1,5 @@
+require_relative 'message'
+
 module HL7::MessageBatchParser
   def parse_batch(batch) # :yields: message
     raise HL7::ParseError, 'badly_formed_batch_message' unless

@@ -58,7 +58,7 @@ class HL7::EmptySegmentNotAllowed < HL7::ParseError
 end
 
 require 'message_parser'
-require 'message'
+require_relative 'message'
 require 'segment_list_storage'
 require 'segment_generator'
 require 'segment_fields'

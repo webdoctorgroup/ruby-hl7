@@ -17,6 +17,8 @@
 #    # this block will be executed when seg.block_example= is called
 #    # and when seg.block_example is called
 #
+require_relative 'message'
+
 class HL7::Message::Segment
   extend HL7::Message::SegmentListStorage
   include HL7::Message::SegmentFields
